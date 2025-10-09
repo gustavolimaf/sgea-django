@@ -1,7 +1,13 @@
-{% extends 'eventos/base.html' %} {% block title %}Home - SGEA{% endblock %} {%
-block extra_css %} {% load static %}
+{% extends 'eventos/base.html' %}
+
+{% block title %}Home - SGEA{% endblock %}
+
+{% block extra_css %}
+{% load static %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <div class="container">
   <!-- Hero Section -->
   <div class="hero">
@@ -57,8 +63,7 @@ block extra_css %} {% load static %}
           >{{ evento.vagas_disponiveis }} vagas</span
         >
         <div class="vagas-bar">
-          {% widthratio evento.vagas_disponiveis evento.vagas_totais 100 as
-          porcentagem %}
+          {% widthratio evento.vagas_disponiveis evento.vagas_totais 100 as porcentagem %}
           <div
             class="vagas-fill"
             style="--vagas-percent: {{ porcentagem }}%; width: var(--vagas-percent)"
