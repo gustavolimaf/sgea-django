@@ -217,9 +217,11 @@ block extra_css %}
           >{{ evento.vagas_disponiveis }} vagas</span
         >
         <div class="vagas-bar">
+          {% widthratio evento.vagas_disponiveis evento.vagas_totais 100 as
+          porcentagem %}
           <div
             class="vagas-fill"
-            style="width: {{ evento.vagas_disponiveis|divisibleby:evento.vagas_totais }}%;"
+            style="--vagas-percent: {{ porcentagem }}%; width: var(--vagas-percent)"
           ></div>
         </div>
       </div>

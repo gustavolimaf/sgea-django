@@ -1,251 +1,499 @@
-{% extends 'eventos/base.html' %}
+{% extends 'eventos/base.html' %}{% extends 'eventos/base.html' %}
 
-{% block title %}Inscritos - {{ evento.titulo }} - SGEA{% endblock %}
 
-{% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h2>
-            <i class="fas fa-users me-2"></i>Inscritos no Evento
-        </h2>
-        <p class="text-muted">{{ evento.titulo }}</p>
-    </div>
-    <div class="col-md-4 text-end">
+
+{% block title %}Inscritos - {{ evento.nome }} - SGEA{% endblock %}{% block title %}Inscritos - {{ evento.titulo }} - SGEA{% endblock %}
+
+
+
+{% block extra_css %}{% block content %}
+
+<style><div class="row mb-4">
+
+    .evento-info-header {    <div class="col-md-8">
+
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);        <h2>
+
+        color: white;            <i class="fas fa-users me-2"></i>Inscritos no Evento
+
+        padding: 2rem;        </h2>
+
+        border-radius: 0.5rem;        <p class="text-muted">{{ evento.titulo }}</p>
+
+        margin-bottom: 2rem;    </div>
+
+    }    <div class="col-md-4 text-end">
+
         <a href="{% url 'eventos:evento_detail' evento.pk %}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Voltar
-        </a>
-    </div>
-</div>
 
-<!-- Estatísticas -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h3>{{ evento.inscricoes.count }}</h3>
+    .evento-info-header h1 {            <i class="fas fa-arrow-left me-2"></i>Voltar
+
+        font-size: 1.75rem;        </a>
+
+        margin-bottom: 0.5rem;    </div>
+
+    }</div>
+
+
+
+    .stats-grid {<!-- Estatísticas -->
+
+        display: grid;<div class="row mb-4">
+
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));    <div class="col-md-3 mb-3">
+
+        gap: 1rem;        <div class="card bg-primary text-white">
+
+        margin-bottom: 2rem;            <div class="card-body text-center">
+
+    }                <h3>{{ evento.inscricoes.count }}</h3>
+
                 <p class="mb-0">Total de Inscritos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h3>{{ evento.vagas }}</h3>
+
+    .stat-card-small {            </div>
+
+        background: white;        </div>
+
+        padding: 1.5rem;    </div>
+
+        border-radius: 0.5rem;    <div class="col-md-3 mb-3">
+
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);        <div class="card bg-success text-white">
+
+        text-align: center;            <div class="card-body text-center">
+
+    }                <h3>{{ evento.vagas }}</h3>
+
                 <p class="mb-0">Vagas Totais</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body text-center">
+
+    .stat-number-small {            </div>
+
+        font-size: 2rem;        </div>
+
+        font-weight: bold;    </div>
+
+        color: var(--primary-color);    <div class="col-md-3 mb-3">
+
+        margin-bottom: 0.25rem;        <div class="card bg-warning text-white">
+
+    }            <div class="card-body text-center">
+
                 <h3>{{ evento.vagas_disponiveis }}</h3>
-                <p class="mb-0">Vagas Disponíveis</p>
-            </div>
-        </div>
-    </div>
+
+    .stat-label-small {                <p class="mb-0">Vagas Disponíveis</p>
+
+        font-size: 0.875rem;            </div>
+
+        color: var(--secondary-color);        </div>
+
+    }    </div>
+
     <div class="col-md-3 mb-3">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <h3>{{ evento.percentual_vagas|floatformat:0 }}%</h3>
-                <p class="mb-0">Taxa de Ocupação</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Ações -->
-<div class="card mb-4">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6 mb-2">
+    .inscritos-table {        <div class="card bg-info text-white">
+
+        background: white;            <div class="card-body text-center">
+
+        border-radius: 0.5rem;                <h3>{{ evento.percentual_vagas|floatformat:0 }}%</h3>
+
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);                <p class="mb-0">Taxa de Ocupação</p>
+
+        overflow: hidden;            </div>
+
+    }        </div>
+
+    </div>
+
+    .table-header {</div>
+
+        display: flex;
+
+        justify-content: space-between;<!-- Ações -->
+
+        align-items: center;<div class="card mb-4">
+
+        padding: 1.5rem;    <div class="card-body">
+
+        border-bottom: 2px solid var(--border-color);        <div class="row">
+
+    }            <div class="col-md-6 mb-2">
+
                 <button class="btn btn-success w-100" onclick="exportarCSV()">
-                    <i class="fas fa-file-csv me-2"></i>Exportar CSV
-                </button>
-            </div>
-            <div class="col-md-6 mb-2">
-                <button class="btn btn-primary w-100" onclick="window.print()">
+
+    .table-title {                    <i class="fas fa-file-csv me-2"></i>Exportar CSV
+
+        font-size: 1.5rem;                </button>
+
+        font-weight: bold;            </div>
+
+        color: var(--dark-text);            <div class="col-md-6 mb-2">
+
+    }                <button class="btn btn-primary w-100" onclick="window.print()">
+
                     <i class="fas fa-print me-2"></i>Imprimir Lista
-                </button>
-            </div>
-        </div>
-    </div>
+
+    .search-box {                </button>
+
+        display: flex;            </div>
+
+        gap: 0.5rem;        </div>
+
+    }    </div>
+
 </div>
 
-<!-- Lista de Inscritos -->
-<div class="card">
-    <div class="card-header bg-white">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
+    .search-input {
+
+        padding: 0.5rem 1rem;<!-- Lista de Inscritos -->
+
+        border: 1px solid var(--border-color);<div class="card">
+
+        border-radius: 0.375rem;    <div class="card-header bg-white">
+
+        min-width: 250px;        <div class="d-flex justify-content-between align-items-center">
+
+    }            <h5 class="mb-0">
+
                 <i class="fas fa-list me-2"></i>Lista de Participantes
-            </h5>
-            <input type="text" 
-                   id="searchInput" 
-                   class="form-control w-25" 
+
+    table {            </h5>
+
+        width: 100%;            <input type="text" 
+
+        border-collapse: collapse;                   id="searchInput" 
+
+    }                   class="form-control w-25" 
+
                    placeholder="Buscar participante..."
-                   onkeyup="filtrarTabela()">
-        </div>
-    </div>
+
+    thead {                   onkeyup="filtrarTabela()">
+
+        background-color: var(--light-bg);        </div>
+
+    }    </div>
+
     <div class="card-body">
-        {% if inscricoes %}
-            <div class="table-responsive">
-                <table class="table table-hover" id="tabelaInscritos">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nome</th>
+
+    th {        {% if inscricoes %}
+
+        padding: 1rem;            <div class="table-responsive">
+
+        text-align: left;                <table class="table table-hover" id="tabelaInscritos">
+
+        font-weight: 600;                    <thead>
+
+        color: var(--dark-text);                        <tr>
+
+        border-bottom: 1px solid var(--border-color);                            <th>#</th>
+
+    }                            <th>Nome</th>
+
                             <th>Email</th>
-                            <th>Data de Inscrição</th>
-                            <th>Status</th>
-                            <th>Certificado</th>
-                            <th>Ações</th>
+
+    td {                            <th>Data de Inscrição</th>
+
+        padding: 1rem;                            <th>Status</th>
+
+        border-bottom: 1px solid var(--border-color);                            <th>Certificado</th>
+
+    }                            <th>Ações</th>
+
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for inscricao in inscricoes %}
+
+    tbody tr:hover {                    </thead>
+
+        background-color: #f8fafc;                    <tbody>
+
+    }                        {% for inscricao in inscricoes %}
+
                             <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>
-                                    <strong>{{ inscricao.participante.get_full_name|default:inscricao.participante.username }}</strong>
-                                </td>
-                                <td>{{ inscricao.participante.email }}</td>
-                                <td>{{ inscricao.data_inscricao|date:"d/m/Y H:i" }}</td>
-                                <td>
+
+    .badge-certificado {                                <td>{{ forloop.counter }}</td>
+
+        display: inline-block;                                <td>
+
+        padding: 0.25rem 0.75rem;                                    <strong>{{ inscricao.participante.get_full_name|default:inscricao.participante.username }}</strong>
+
+        border-radius: 0.25rem;                                </td>
+
+        font-size: 0.875rem;                                <td>{{ inscricao.participante.email }}</td>
+
+        font-weight: 500;                                <td>{{ inscricao.data_inscricao|date:"d/m/Y H:i" }}</td>
+
+    }                                <td>
+
                                     {% if inscricao.confirmado %}
-                                        <span class="badge bg-success">
-                                            <i class="fas fa-check me-1"></i>Confirmado
-                                        </span>
-                                    {% else %}
+
+    .badge-success {                                        <span class="badge bg-success">
+
+        background-color: var(--success-color);                                            <i class="fas fa-check me-1"></i>Confirmado
+
+        color: white;                                        </span>
+
+    }                                    {% else %}
+
                                         <span class="badge bg-warning">
-                                            <i class="fas fa-clock me-1"></i>Pendente
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if inscricao.certificado %}
+
+    .badge-secondary {                                            <i class="fas fa-clock me-1"></i>Pendente
+
+        background-color: var(--secondary-color);                                        </span>
+
+        color: white;                                    {% endif %}
+
+    }                                </td>
+
+</style>                                <td>
+
+{% endblock %}                                    {% if inscricao.certificado %}
+
                                         <span class="badge bg-success">
-                                            <i class="fas fa-certificate me-1"></i>Emitido
-                                        </span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">
-                                            <i class="fas fa-times me-1"></i>Não emitido
-                                        </span>
-                                    {% endif %}
-                                </td>
+
+{% block content %}                                            <i class="fas fa-certificate me-1"></i>Emitido
+
+<div class="container">                                        </span>
+
+    <!-- Header -->                                    {% else %}
+
+    <div class="evento-info-header">                                        <span class="badge bg-secondary">
+
+        <h1>{{ evento.nome }}</h1>                                            <i class="fas fa-times me-1"></i>Não emitido
+
+        <p style="margin-bottom: 0.5rem;">📅 {{ evento.data_inicial|date:"d/m/Y" }} - {{ evento.data_final|date:"d/m/Y" }}</p>                                        </span>
+
+        <p style="margin-bottom: 0;">📍 {{ evento.local }}</p>                                    {% endif %}
+
+    </div>                                </td>
+
                                 <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        {% if not inscricao.certificado and evento.evento_finalizado %}
-                                            <button class="btn btn-outline-success" 
-                                                    onclick="emitirCertificado({{ inscricao.pk }})"
-                                                    title="Emitir Certificado">
-                                                <i class="fas fa-certificate"></i>
-                                            </button>
-                                        {% endif %}
-                                        <button class="btn btn-outline-danger" 
-                                                onclick="cancelarInscricao({{ inscricao.pk }})"
-                                                title="Cancelar Inscrição">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+
+    <!-- Estatísticas -->                                    <div class="btn-group btn-group-sm" role="group">
+
+    <div class="stats-grid">                                        {% if not inscricao.certificado and evento.evento_finalizado %}
+
+        <div class="stat-card-small">                                            <button class="btn btn-outline-success" 
+
+            <div class="stat-number-small">{{ total_inscritos }}</div>                                                    onclick="emitirCertificado({{ inscricao.pk }})"
+
+            <div class="stat-label-small">Total de Inscritos</div>                                                    title="Emitir Certificado">
+
+        </div>                                                <i class="fas fa-certificate"></i>
+
+        <div class="stat-card-small">                                            </button>
+
+            <div class="stat-number-small">{{ evento.vagas_totais }}</div>                                        {% endif %}
+
+            <div class="stat-label-small">Vagas Totais</div>                                        <button class="btn btn-outline-danger" 
+
+        </div>                                                onclick="cancelarInscricao({{ inscricao.pk }})"
+
+        <div class="stat-card-small">                                                title="Cancelar Inscrição">
+
+            <div class="stat-number-small">{{ evento.vagas_disponiveis }}</div>                                            <i class="fas fa-trash"></i>
+
+            <div class="stat-label-small">Vagas Disponíveis</div>                                        </button>
+
+        </div>                                    </div>
+
+        <div class="stat-card-small">                                </td>
+
+            <div class="stat-number-small">{{ certificados_emitidos }}</div>                            </tr>
+
+            <div class="stat-label-small">Certificados Emitidos</div>                        {% endfor %}
+
+        </div>                    </tbody>
+
+    </div>                </table>
+
             </div>
 
-            <!-- Paginação -->
-            {% if is_paginated %}
-                <nav aria-label="Navegação de página" class="mt-3">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1">Primeira</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                            </li>
-                        {% endif %}
+    <!-- Tabela de Inscritos -->
 
-                        <li class="page-item active">
-                            <span class="page-link">
-                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-                            </span>
-                        </li>
+    <div class="inscritos-table">            <!-- Paginação -->
 
-                        {% if page_obj.has_next %}
+        <div class="table-header">            {% if is_paginated %}
+
+            <h2 class="table-title">Lista de Participantes</h2>                <nav aria-label="Navegação de página" class="mt-3">
+
+            <div class="search-box">                    <ul class="pagination justify-content-center">
+
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar participante...">                        {% if page_obj.has_previous %}
+
+                <button class="btn btn-primary" onclick="searchTable()">Buscar</button>                            <li class="page-item">
+
+            </div>                                <a class="page-link" href="?page=1">Primeira</a>
+
+        </div>                            </li>
+
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
-        {% else %}
-            <div class="alert alert-info mb-0">
-                <i class="fas fa-info-circle me-2"></i>
-                Ainda não há inscritos neste evento.
-            </div>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-function filtrarTabela() {
-    const input = document.getElementById('searchInput');
-    const filter = input.value.toUpperCase();
-    const table = document.getElementById('tabelaInscritos');
-    const tr = table.getElementsByTagName('tr');
+        <table id="inscritosTable">                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
 
-    for (let i = 1; i < tr.length; i++) {
-        const td = tr[i].getElementsByTagName('td')[1]; // Nome
-        const email = tr[i].getElementsByTagName('td')[2]; // Email
-        
-        if (td || email) {
-            const txtValueName = td.textContent || td.innerText;
-            const txtValueEmail = email.textContent || email.innerText;
-            
-            if (txtValueName.toUpperCase().indexOf(filter) > -1 || 
-                txtValueEmail.toUpperCase().indexOf(filter) > -1) {
+            <thead>                            </li>
+
+                <tr>                        {% endif %}
+
+                    <th>Nome</th>
+
+                    <th>Email</th>                        <li class="page-item active">
+
+                    <th>Perfil</th>                            <span class="page-link">
+
+                    <th>Instituição</th>                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+
+                    <th>Data Inscrição</th>                            </span>
+
+                    <th>Certificado</th>                        </li>
+
+                    <th>Ações</th>
+
+                </tr>                        {% if page_obj.has_next %}
+
+            </thead>                            <li class="page-item">
+
+            <tbody>                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a>
+
+                {% for inscricao in inscricoes %}                            </li>
+
+                <tr>                            <li class="page-item">
+
+                    <td>{{ inscricao.usuario.get_full_name }}</td>                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última</a>
+
+                    <td>{{ inscricao.usuario.email }}</td>                            </li>
+
+                    <td>{{ inscricao.usuario.get_perfil_display }}</td>                        {% endif %}
+
+                    <td>{{ inscricao.usuario.instituicao|default:"N/A" }}</td>                    </ul>
+
+                    <td>{{ inscricao.data_inscricao|date:"d/m/Y H:i" }}</td>                </nav>
+
+                    <td>            {% endif %}
+
+                        {% if inscricao.certificado %}        {% else %}
+
+                            <span class="badge-certificado badge-success">✓ Emitido</span>            <div class="alert alert-info mb-0">
+
+                        {% else %}                <i class="fas fa-info-circle me-2"></i>
+
+                            <span class="badge-certificado badge-secondary">Pendente</span>                Ainda não há inscritos neste evento.
+
+                        {% endif %}            </div>
+
+                    </td>        {% endif %}
+
+                    <td>    </div>
+
+                        {% if not inscricao.certificado %}</div>
+
+                            <a href="{% url 'certificado_emitir' inscricao.pk %}" class="btn btn-sm btn-primary">{% endblock %}
+
+                                Emitir Certificado
+
+                            </a>{% block extra_js %}
+
+                        {% else %}<script>
+
+                            <a href="{% url 'certificado_download' inscricao.certificado.pk %}" class="btn btn-sm btn-success">function filtrarTabela() {
+
+                                Download PDF    const input = document.getElementById('searchInput');
+
+                            </a>    const filter = input.value.toUpperCase();
+
+                        {% endif %}    const table = document.getElementById('tabelaInscritos');
+
+                    </td>    const tr = table.getElementsByTagName('tr');
+
+                </tr>
+
+                {% empty %}    for (let i = 1; i < tr.length; i++) {
+
+                <tr>        const td = tr[i].getElementsByTagName('td')[1]; // Nome
+
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--secondary-color);">        const email = tr[i].getElementsByTagName('td')[2]; // Email
+
+                        Nenhum inscrito encontrado.        
+
+                    </td>        if (td || email) {
+
+                </tr>            const txtValueName = td.textContent || td.innerText;
+
+                {% endfor %}            const txtValueEmail = email.textContent || email.innerText;
+
+            </tbody>            
+
+        </table>            if (txtValueName.toUpperCase().indexOf(filter) > -1 || 
+
+    </div>                txtValueEmail.toUpperCase().indexOf(filter) > -1) {
+
                 tr[i].style.display = '';
-            } else {
-                tr[i].style.display = 'none';
-            }
-        }
+
+    <div class="mt-4">            } else {
+
+        <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-outline">Voltar ao Evento</a>                tr[i].style.display = 'none';
+
+    </div>            }
+
+</div>        }
+
     }
+
+<script>}
+
+function searchTable() {
+
+    const input = document.getElementById('searchInput');function exportarCSV() {
+
+    const filter = input.value.toUpperCase();    const table = document.getElementById('tabelaInscritos');
+
+    const table = document.getElementById('inscritosTable');    let csv = [];
+
+    const tr = table.getElementsByTagName('tr');    const rows = table.querySelectorAll('tr');
+
+    
+
+    for (let i = 1; i < tr.length; i++) {    for (let i = 0; i < rows.length; i++) {
+
+        const td = tr[i].getElementsByTagName('td');        const row = [], cols = rows[i].querySelectorAll('td, th');
+
+        let found = false;        
+
+                for (let j = 0; j < cols.length - 1; j++) { // Exclui coluna de ações
+
+        for (let j = 0; j < td.length; j++) {            row.push(cols[j].innerText);
+
+            if (td[j]) {        }
+
+                const txtValue = td[j].textContent || td[j].innerText;        csv.push(row.join(','));
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {    }
+
+                    found = true;    
+
+                    break;    const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+
+                }    const downloadLink = document.createElement('a');
+
+            }    downloadLink.download = 'inscritos_{{ evento.slug }}.csv';
+
+        }    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            downloadLink.style.display = 'none';
+
+        tr[i].style.display = found ? '' : 'none';    document.body.appendChild(downloadLink);
+
+    }    downloadLink.click();
+
+}    document.body.removeChild(downloadLink);
+
 }
 
-function exportarCSV() {
-    const table = document.getElementById('tabelaInscritos');
-    let csv = [];
-    const rows = table.querySelectorAll('tr');
-    
-    for (let i = 0; i < rows.length; i++) {
-        const row = [], cols = rows[i].querySelectorAll('td, th');
-        
-        for (let j = 0; j < cols.length - 1; j++) { // Exclui coluna de ações
-            row.push(cols[j].innerText);
-        }
-        csv.push(row.join(','));
-    }
-    
-    const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-    const downloadLink = document.createElement('a');
-    downloadLink.download = 'inscritos_{{ evento.slug }}.csv';
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-    downloadLink.style.display = 'none';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-}
+// Busca em tempo real
 
-function emitirCertificado(inscricaoId) {
-    if (confirm('Deseja emitir o certificado para este participante?')) {
-        // Implementar requisição AJAX para emitir certificado
+document.getElementById('searchInput').addEventListener('keyup', searchTable);function emitirCertificado(inscricaoId) {
+
+</script>    if (confirm('Deseja emitir o certificado para este participante?')) {
+
+{% endblock %}        // Implementar requisição AJAX para emitir certificado
+
         window.location.href = '/eventos/certificado/emitir/' + inscricaoId + '/';
     }
 }

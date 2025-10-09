@@ -1,150 +1,298 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Certificado - {{ certificado.evento.titulo }}</title>
-    <style>
-        @page {
-            size: A4 landscape;
-            margin: 0;
-        }
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .certificado {
-            width: 297mm;
-            height: 210mm;
-            padding: 40mm;
-            box-sizing: border-box;
-            background: white;
-            border: 15px solid #4a5568;
-            position: relative;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .titulo {
-            font-size: 48px;
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-        }
-        .subtitulo {
-            font-size: 18px;
-            color: #4a5568;
-            margin-bottom: 40px;
-        }
-        .conteudo {
-            text-align: center;
-            line-height: 1.8;
-            font-size: 16px;
-        }
-        .participante {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2b6cb0;
-            margin: 30px 0;
-            text-transform: uppercase;
-        }
-        .evento-info {
-            margin: 30px 0;
-        }
-        .evento-titulo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2d3748;
-            margin: 15px 0;
-        }
-        .detalhes {
-            font-size: 14px;
-            color: #4a5568;
-            margin: 10px 0;
-        }
-        .footer {
-            margin-top: 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .assinatura {
-            text-align: center;
-            width: 200px;
-        }
-        .linha-assinatura {
-            border-top: 2px solid #2d3748;
-            margin-bottom: 5px;
-        }
-        .codigo-verificacao {
-            position: absolute;
-            bottom: 10mm;
-            right: 10mm;
-            font-size: 10px;
-            color: #718096;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2b6cb0;
-        }
-    </style>
-</head>
-<body>
-    <div class="certificado">
-        <div class="header">
-            <div class="logo">SGEA</div>
-            <div class="titulo">CERTIFICADO</div>
-            <div class="subtitulo">DE PARTICIPAÇÃO</div>
-        </div>
+<!DOCTYPE html><!DOCTYPE html>
 
-        <div class="conteudo">
-            <p>Certificamos que</p>
-            
-            <div class="participante">
-                {{ certificado.participante.get_full_name|default:certificado.participante.username }}
-            </div>
+<html lang="pt-BR"><html lang="pt-br">
 
-            <p>participou do evento</p>
+<head><head>
 
-            <div class="evento-info">
-                <div class="evento-titulo">{{ certificado.evento.titulo }}</div>
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <title>Certificado - {{ usuario.get_full_name }}</title>    <title>Certificado - {{ certificado.evento.titulo }}</title>
+
+    <style>    <style>
+
+        @page { size: A4 landscape; margin: 0; }        @page {
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }            size: A4 landscape;
+
+        body {            margin: 0;
+
+            font-family: 'Georgia', serif;        }
+
+            width: 297mm;        body {
+
+            height: 210mm;            font-family: 'Times New Roman', Times, serif;
+
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            margin: 0;
+
+            display: flex;            padding: 0;
+
+            align-items: center;            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            justify-content: center;        }
+
+        }        .certificado {
+
+        .certificado-container {            width: 297mm;
+
+            width: 280mm;            height: 210mm;
+
+            height: 195mm;            padding: 40mm;
+
+            background: white;            box-sizing: border-box;
+
+            padding: 40px;            background: white;
+
+            border: 15px solid #667eea;            border: 15px solid #4a5568;
+
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);            position: relative;
+
+            position: relative;        }
+
+        }        .header {
+
+        .certificado-border {            text-align: center;
+
+            position: absolute;            margin-bottom: 30px;
+
+            top: 50px; left: 50px; right: 50px; bottom: 50px;        }
+
+            border: 2px solid #764ba2;        .titulo {
+
+        }            font-size: 48px;
+
+        .certificado-content {            font-weight: bold;
+
+            position: relative;            color: #2d3748;
+
+            z-index: 1;            margin-bottom: 20px;
+
+            text-align: center;            letter-spacing: 3px;
+
+            padding: 30px;        }
+
+        }        .subtitulo {
+
+        .certificado-logo { font-size: 48px; color: #667eea; margin-bottom: 10px; }            font-size: 18px;
+
+        .certificado-title {            color: #4a5568;
+
+            font-size: 52px;            margin-bottom: 40px;
+
+            font-weight: bold;        }
+
+            color: #1e293b;        .conteudo {
+
+            letter-spacing: 3px;            text-align: center;
+
+            margin-bottom: 10px;            line-height: 1.8;
+
+            text-transform: uppercase;            font-size: 16px;
+
+        }        }
+
+        .certificado-subtitle { font-size: 18px; color: #64748b; font-style: italic; }        .participante {
+
+        .certificado-text { font-size: 20px; line-height: 1.8; color: #334155; margin-bottom: 20px; }            font-size: 32px;
+
+        .participante-nome {            font-weight: bold;
+
+            font-size: 36px;            color: #2b6cb0;
+
+            font-weight: bold;            margin: 30px 0;
+
+            color: #667eea;            text-transform: uppercase;
+
+            margin: 30px 0;        }
+
+            text-decoration: underline;        .evento-info {
+
+            text-decoration-color: #764ba2;            margin: 30px 0;
+
+            text-underline-offset: 8px;        }
+
+        }        .evento-titulo {
+
+        .evento-nome { font-size: 28px; font-weight: bold; color: #1e293b; margin-bottom: 15px; }            font-size: 24px;
+
+        .evento-detalhes { font-size: 18px; color: #64748b; line-height: 1.6; }            font-weight: bold;
+
+        .certificado-footer {            color: #2d3748;
+
+            margin-top: 40px;            margin: 15px 0;
+
+            display: flex;        }
+
+            justify-content: space-around;        .detalhes {
+
+            align-items: flex-end;            font-size: 14px;
+
+        }            color: #4a5568;
+
+        .assinatura { text-align: center; width: 250px; }            margin: 10px 0;
+
+        .assinatura-linha {        }
+
+            border-top: 2px solid #1e293b;        .footer {
+
+            margin-bottom: 10px;            margin-top: 50px;
+
+            padding-top: 10px;            display: flex;
+
+        }            justify-content: space-between;
+
+        .assinatura-nome { font-size: 16px; font-weight: bold; color: #1e293b; }            align-items: flex-end;
+
+        .assinatura-cargo { font-size: 14px; color: #64748b; font-style: italic; }        }
+
+        .certificado-codigo {        .assinatura {
+
+            position: absolute;            text-align: center;
+
+            bottom: 20px;            width: 200px;
+
+            right: 30px;        }
+
+            font-size: 11px;        .linha-assinatura {
+
+            color: #94a3b8;            border-top: 2px solid #2d3748;
+
+            font-family: 'Courier New', monospace;            margin-bottom: 5px;
+
+        }        }
+
+        .ornamento {        .codigo-verificacao {
+
+            position: absolute;            position: absolute;
+
+            font-size: 120px;            bottom: 10mm;
+
+            color: rgba(102, 126, 234, 0.05);            right: 10mm;
+
+        }            font-size: 10px;
+
+        .ornamento-tl { top: 10px; left: 10px; }            color: #718096;
+
+        .ornamento-tr { top: 10px; right: 10px; }        }
+
+        .ornamento-bl { bottom: 10px; left: 10px; }        .logo {
+
+        .ornamento-br { bottom: 10px; right: 10px; }            font-size: 24px;
+
+    </style>            font-weight: bold;
+
+</head>            color: #2b6cb0;
+
+<body>        }
+
+    <div class="certificado-container">    </style>
+
+        <div class="ornamento ornamento-tl">❋</div></head>
+
+        <div class="ornamento ornamento-tr">❋</div><body>
+
+        <div class="ornamento ornamento-bl">❋</div>    <div class="certificado">
+
+        <div class="ornamento ornamento-br">❋</div>        <div class="header">
+
+        <div class="certificado-border"></div>            <div class="logo">SGEA</div>
+
+                    <div class="titulo">CERTIFICADO</div>
+
+        <div class="certificado-content">            <div class="subtitulo">DE PARTICIPAÇÃO</div>
+
+            <div class="certificado-header">        </div>
+
+                <div class="certificado-logo">🎓</div>
+
+                <h1 class="certificado-title">Certificado</h1>        <div class="conteudo">
+
+                <p class="certificado-subtitle">de Participação</p>            <p>Certificamos que</p>
+
+            </div>            
+
+                        <div class="participante">
+
+            <div class="certificado-body">                {{ certificado.participante.get_full_name|default:certificado.participante.username }}
+
+                <p class="certificado-text">Certificamos que</p>            </div>
+
+                <div class="participante-nome">{{ usuario.get_full_name }}</div>
+
+                <p class="certificado-text">participou do evento</p>            <p>participou do evento</p>
+
                 
-                <div class="detalhes">
-                    Realizado em {{ certificado.evento.data_inicio|date:"d de F de Y" }}
-                </div>
-                
-                <div class="detalhes">
-                    Local: {{ certificado.evento.local }}
-                </div>
-                
-                <div class="detalhes">
-                    Carga Horária: {{ certificado.evento.carga_horaria }} horas
-                </div>
-            </div>
-        </div>
 
-        <div class="footer">
-            <div class="assinatura">
-                <div class="linha-assinatura"></div>
-                <div>{{ certificado.evento.organizador.get_full_name|default:certificado.evento.organizador.username }}</div>
-                <div style="font-size: 12px; color: #718096;">Organizador</div>
-            </div>
+                <div class="evento-info">            <div class="evento-info">
 
-            <div class="assinatura">
-                <div class="linha-assinatura"></div>
-                <div>Data de Emissão</div>
-                <div style="font-size: 12px; color: #718096;">{{ certificado.data_emissao|date:"d/m/Y" }}</div>
-            </div>
-        </div>
+                    <div class="evento-nome">{{ evento.nome }}</div>                <div class="evento-titulo">{{ certificado.evento.titulo }}</div>
 
-        <div class="codigo-verificacao">
+                    <div class="evento-detalhes">                
+
+                        {{ evento.get_tipo_display }} realizado em {{ evento.data_inicial|date:"d" }}                <div class="detalhes">
+
+                        {% if evento.data_final != evento.data_inicial %}                    Realizado em {{ certificado.evento.data_inicio|date:"d de F de Y" }}
+
+                            a {{ evento.data_final|date:"d" }}                </div>
+
+                        {% endif %}                
+
+                        de {{ evento.data_inicial|date:"F" }} de {{ evento.data_inicial|date:"Y" }},<br>                <div class="detalhes">
+
+                        com carga horária de {{ evento.duracao_horas }} horas.                    Local: {{ certificado.evento.local }}
+
+                    </div>                </div>
+
+                </div>                
+
+            </div>                <div class="detalhes">
+
+                                Carga Horária: {{ certificado.evento.carga_horaria }} horas
+
+            <div class="certificado-footer">                </div>
+
+                <div class="assinatura">            </div>
+
+                    <div class="assinatura-linha">        </div>
+
+                        <div class="assinatura-nome">{{ certificado.emitido_por.get_full_name }}</div>
+
+                        <div class="assinatura-cargo">Organizador do Evento</div>        <div class="footer">
+
+                    </div>            <div class="assinatura">
+
+                </div>                <div class="linha-assinatura"></div>
+
+                <div class="assinatura">                <div>{{ certificado.evento.organizador.get_full_name|default:certificado.evento.organizador.username }}</div>
+
+                    <div class="assinatura-linha">                <div style="font-size: 12px; color: #718096;">Organizador</div>
+
+                        <div class="assinatura-nome">Sistema SGEA</div>            </div>
+
+                        <div class="assinatura-cargo">Coordenação de Eventos</div>
+
+                    </div>            <div class="assinatura">
+
+                </div>                <div class="linha-assinatura"></div>
+
+            </div>                <div>Data de Emissão</div>
+
+        </div>                <div style="font-size: 12px; color: #718096;">{{ certificado.data_emissao|date:"d/m/Y" }}</div>
+
+                    </div>
+
+        <div class="certificado-codigo">        </div>
+
             Código de Verificação: {{ certificado.codigo_verificacao }}<br>
-            Valide em: {{ request.build_absolute_uri }}/validar/
-        </div>
-    </div>
+
+            Emitido em: {{ certificado.data_emissao|date:"d/m/Y" }}        <div class="codigo-verificacao">
+
+        </div>            Código de Verificação: {{ certificado.codigo_verificacao }}<br>
+
+    </div>            Valide em: {{ request.build_absolute_uri }}/validar/
+
+</body>        </div>
+
+</html>    </div>
+
 </body>
 </html>
