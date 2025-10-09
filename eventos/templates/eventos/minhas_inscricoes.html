@@ -1,0 +1,184 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Minhas Inscrições - SGEA{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2>
+            <i class="fas fa-ticket-alt me-2"></i>Minhas Inscrições
+        </h2>
+        <p class="text-muted">Gerencie suas inscrições em eventos</p>
+    </div>
+</div>
+
+<!-- Estatísticas -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h3>{{ inscricoes_ativas }}</h3>
+                <p class="mb-0">Inscrições Ativas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h3>{{ eventos_realizados }}</h3>
+                <p class="mb-0">Eventos Realizados</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h3>{{ total_inscricoes }}</h3>
+                <p class="mb-0">Total de Inscrições</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="btn-group" role="group">
+            <a href="?status=todas" class="btn btn-outline-primary {% if not request.GET.status or request.GET.status == 'todas' %}active{% endif %}">
+                Todas
+            </a>
+            <a href="?status=proximas" class="btn btn-outline-primary {% if request.GET.status == 'proximas' %}active{% endif %}">
+                Próximas
+            </a>
+            <a href="?status=realizadas" class="btn btn-outline-primary {% if request.GET.status == 'realizadas' %}active{% endif %}">
+                Realizadas
+            </a>
+            <a href="?status=canceladas" class="btn btn-outline-primary {% if request.GET.status == 'canceladas' %}active{% endif %}">
+                Canceladas
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de Inscrições -->
+{% if inscricoes %}
+    {% for inscricao in inscricoes %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        {% if inscricao.evento.imagem %}
+                            <img src="{{ inscricao.evento.imagem.url }}" 
+                                 class="img-fluid rounded" 
+                                 alt="{{ inscricao.evento.titulo }}"
+                                 style="max-height: 100px;">
+                        {% else %}
+                            <i class="fas fa-calendar-alt fa-4x text-primary"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="card-title">{{ inscricao.evento.titulo }}</h5>
+                        <p class="card-text mb-2">
+                            <i class="fas fa-calendar me-2 text-primary"></i>
+                            {{ inscricao.evento.data_inicio|date:"d/m/Y - H:i" }}
+                        </p>
+                        <p class="card-text mb-2">
+                            <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                            {{ inscricao.evento.local }}
+                        </p>
+                        <p class="card-text mb-0">
+                            <i class="fas fa-clock me-2 text-primary"></i>
+                            Carga horária: {{ inscricao.evento.carga_horaria }}h
+                        </p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-2">
+                            {% if inscricao.confirmado %}
+                                <span class="badge bg-success mb-2">
+                                    <i class="fas fa-check-circle me-1"></i>Confirmado
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning mb-2">
+                                    <i class="fas fa-clock me-1"></i>Pendente
+                                </span>
+                            {% endif %}
+                            
+                            <br>
+                            
+                            <small class="text-muted">
+                                Inscrito em: {{ inscricao.data_inscricao|date:"d/m/Y" }}
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'eventos:evento_detail' inscricao.evento.pk %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-2"></i>Ver Detalhes
+                            </a>
+                            
+                            {% if inscricao.certificado %}
+                                <a href="{% url 'eventos:certificado_download' inscricao.certificado.pk %}" 
+                                   class="btn btn-sm btn-success"
+                                   target="_blank">
+                                    <i class="fas fa-download me-2"></i>Baixar Certificado
+                                </a>
+                            {% elif inscricao.evento.evento_finalizado %}
+                                <button class="btn btn-sm btn-secondary" disabled>
+                                    <i class="fas fa-certificate me-2"></i>Certificado Pendente
+                                </button>
+                            {% endif %}
+                            
+                            {% if not inscricao.evento.evento_finalizado %}
+                                <a href="{% url 'eventos:inscricao_cancelar' inscricao.evento.pk %}" 
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Tem certeza que deseja cancelar sua inscrição?')">
+                                    <i class="fas fa-times me-2"></i>Cancelar Inscrição
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Paginação -->
+    {% if is_paginated %}
+        <nav aria-label="Navegação de página">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Primeira</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Anterior</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Próxima</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Última</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Você ainda não possui inscrições em eventos.
+        <a href="{% url 'eventos:evento_list' %}" class="alert-link">Ver eventos disponíveis</a>
+    </div>
+{% endif %}
+{% endblock %}

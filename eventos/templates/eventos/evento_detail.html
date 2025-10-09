@@ -1,0 +1,214 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}{{ evento.titulo }} - SGEA{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <!-- Imagem do Evento -->
+        {% if evento.imagem %}
+            <img src="{{ evento.imagem.url }}" class="img-fluid rounded mb-4" alt="{{ evento.titulo }}">
+        {% else %}
+            <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-4" style="height: 400px;">
+                <i class="fas fa-calendar-alt fa-10x text-white opacity-25"></i>
+            </div>
+        {% endif %}
+
+        <!-- Informações do Evento -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="card-title mb-3">{{ evento.titulo }}</h1>
+                
+                <div class="mb-3">
+                    <span class="badge bg-info me-2">{{ evento.categoria }}</span>
+                    {% if evento.is_ativo %}
+                        <span class="badge bg-success">Inscrições Abertas</span>
+                    {% else %}
+                        <span class="badge bg-danger">Encerrado</span>
+                    {% endif %}
+                </div>
+
+                <h5 class="mt-4">
+                    <i class="fas fa-info-circle me-2"></i>Descrição
+                </h5>
+                <p class="card-text">{{ evento.descricao|linebreaks }}</p>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-calendar me-2 text-primary"></i>Data e Hora</h6>
+                        <p class="mb-1">
+                            <strong>Início:</strong> {{ evento.data_inicio|date:"d/m/Y - H:i" }}
+                        </p>
+                        <p>
+                            <strong>Término:</strong> {{ evento.data_fim|date:"d/m/Y - H:i" }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-map-marker-alt me-2 text-primary"></i>Local</h6>
+                        <p>{{ evento.local }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-users me-2 text-primary"></i>Vagas</h6>
+                        <p>
+                            <strong>{{ evento.inscricoes.count }}</strong> de <strong>{{ evento.vagas }}</strong> vagas preenchidas
+                        </p>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar" 
+                                 role="progressbar" 
+                                 style="width: {{ evento.percentual_vagas }}%"
+                                 aria-valuenow="{{ evento.percentual_vagas }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{ evento.percentual_vagas }}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6><i class="fas fa-clock me-2 text-primary"></i>Carga Horária</h6>
+                        <p>{{ evento.carga_horaria }} horas</p>
+                    </div>
+                </div>
+
+                {% if evento.organizador %}
+                    <hr>
+                    <h6><i class="fas fa-user-tie me-2 text-primary"></i>Organizador</h6>
+                    <p>{{ evento.organizador.get_full_name|default:evento.organizador.username }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Requisitos -->
+        {% if evento.requisitos %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5>
+                        <i class="fas fa-check-circle me-2"></i>Requisitos
+                    </h5>
+                    <p>{{ evento.requisitos|linebreaks }}</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-md-4">
+        <!-- Inscrição -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-ticket-alt me-2"></i>Inscrição
+                </h5>
+                
+                {% if user.is_authenticated %}
+                    {% if ja_inscrito %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Você já está inscrito neste evento!
+                        </div>
+                        <a href="{% url 'eventos:minhas_inscricoes' %}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="fas fa-list me-2"></i>Minhas Inscrições
+                        </a>
+                        <a href="{% url 'eventos:inscricao_cancelar' evento.pk %}" 
+                           class="btn btn-outline-danger w-100"
+                           onclick="return confirm('Tem certeza que deseja cancelar sua inscrição?')">
+                            <i class="fas fa-times me-2"></i>Cancelar Inscrição
+                        </a>
+                    {% elif evento.vagas_disponiveis > 0 and evento.is_ativo %}
+                        <p class="text-muted">
+                            <strong>{{ evento.vagas_disponiveis }}</strong> vagas disponíveis
+                        </p>
+                        <form method="post" action="{% url 'eventos:evento_inscrever' evento.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-check me-2"></i>Inscrever-se
+                            </button>
+                        </form>
+                    {% elif evento.vagas_disponiveis == 0 %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Evento lotado
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            Inscrições encerradas
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted">Faça login para se inscrever</p>
+                    <a href="{% url 'eventos:login' %}?next={{ request.path }}" class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Fazer Login
+                    </a>
+                    <a href="{% url 'eventos:registro' %}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-user-plus me-2"></i>Cadastrar
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Compartilhar -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-share-alt me-2"></i>Compartilhar
+                </h5>
+                <div class="d-grid gap-2">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                       target="_blank" 
+                       class="btn btn-outline-primary">
+                        <i class="fab fa-facebook me-2"></i>Facebook
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ evento.titulo }}" 
+                       target="_blank" 
+                       class="btn btn-outline-info">
+                        <i class="fab fa-twitter me-2"></i>Twitter
+                    </a>
+                    <a href="https://wa.me/?text={{ evento.titulo }}%20{{ request.build_absolute_uri }}" 
+                       target="_blank" 
+                       class="btn btn-outline-success">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações do Organizador -->
+        {% if user.is_staff %}
+            <div class="card mb-4 border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-tools me-2"></i>Ações do Organizador
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'eventos:evento_update' evento.pk %}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Editar Evento
+                        </a>
+                        <a href="{% url 'eventos:evento_inscritos' evento.pk %}" class="btn btn-info">
+                            <i class="fas fa-users me-2"></i>Ver Inscritos ({{ evento.inscricoes.count }})
+                        </a>
+                        <a href="{% url 'eventos:evento_delete' evento.pk %}" 
+                           class="btn btn-danger"
+                           onclick="return confirm('Tem certeza que deseja excluir este evento?')">
+                            <i class="fas fa-trash me-2"></i>Excluir Evento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Botão Voltar -->
+<div class="row mt-4">
+    <div class="col-12">
+        <a href="{% url 'eventos:evento_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Voltar para Lista de Eventos
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Cancelar Inscrição - SGEA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Cancelar Inscrição
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+                </div>
+
+                <h5 class="mb-3">Você está prestes a cancelar sua inscrição no evento:</h5>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ evento.titulo }}</h6>
+                        <p class="card-text mb-2">
+                            <i class="fas fa-calendar me-2"></i>
+                            {{ evento.data_inicio|date:"d/m/Y - H:i" }}
+                        </p>
+                        <p class="card-text mb-0">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            {{ evento.local }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6>Consequências do cancelamento:</h6>
+                    <ul>
+                        <li>Sua vaga será liberada para outros participantes</li>
+                        <li>Você perderá o acesso ao evento</li>
+                        <li>Não será possível emitir certificado para este evento</li>
+                        <li>Você pode se inscrever novamente se houver vagas disponíveis</li>
+                    </ul>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="motivo" class="form-label">
+                            Motivo do cancelamento (opcional):
+                        </label>
+                        <textarea class="form-control" 
+                                  id="motivo" 
+                                  name="motivo" 
+                                  rows="3"
+                                  placeholder="Informe o motivo do cancelamento..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'eventos:minhas_inscricoes' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            Confirmar Cancelamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

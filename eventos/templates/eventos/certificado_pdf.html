@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado - {{ certificado.evento.titulo }}</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .certificado {
+            width: 297mm;
+            height: 210mm;
+            padding: 40mm;
+            box-sizing: border-box;
+            background: white;
+            border: 15px solid #4a5568;
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .titulo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+        .subtitulo {
+            font-size: 18px;
+            color: #4a5568;
+            margin-bottom: 40px;
+        }
+        .conteudo {
+            text-align: center;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .participante {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2b6cb0;
+            margin: 30px 0;
+            text-transform: uppercase;
+        }
+        .evento-info {
+            margin: 30px 0;
+        }
+        .evento-titulo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 15px 0;
+        }
+        .detalhes {
+            font-size: 14px;
+            color: #4a5568;
+            margin: 10px 0;
+        }
+        .footer {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .assinatura {
+            text-align: center;
+            width: 200px;
+        }
+        .linha-assinatura {
+            border-top: 2px solid #2d3748;
+            margin-bottom: 5px;
+        }
+        .codigo-verificacao {
+            position: absolute;
+            bottom: 10mm;
+            right: 10mm;
+            font-size: 10px;
+            color: #718096;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificado">
+        <div class="header">
+            <div class="logo">SGEA</div>
+            <div class="titulo">CERTIFICADO</div>
+            <div class="subtitulo">DE PARTICIPAÇÃO</div>
+        </div>
+
+        <div class="conteudo">
+            <p>Certificamos que</p>
+            
+            <div class="participante">
+                {{ certificado.participante.get_full_name|default:certificado.participante.username }}
+            </div>
+
+            <p>participou do evento</p>
+
+            <div class="evento-info">
+                <div class="evento-titulo">{{ certificado.evento.titulo }}</div>
+                
+                <div class="detalhes">
+                    Realizado em {{ certificado.evento.data_inicio|date:"d de F de Y" }}
+                </div>
+                
+                <div class="detalhes">
+                    Local: {{ certificado.evento.local }}
+                </div>
+                
+                <div class="detalhes">
+                    Carga Horária: {{ certificado.evento.carga_horaria }} horas
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="assinatura">
+                <div class="linha-assinatura"></div>
+                <div>{{ certificado.evento.organizador.get_full_name|default:certificado.evento.organizador.username }}</div>
+                <div style="font-size: 12px; color: #718096;">Organizador</div>
+            </div>
+
+            <div class="assinatura">
+                <div class="linha-assinatura"></div>
+                <div>Data de Emissão</div>
+                <div style="font-size: 12px; color: #718096;">{{ certificado.data_emissao|date:"d/m/Y" }}</div>
+            </div>
+        </div>
+
+        <div class="codigo-verificacao">
+            Código de Verificação: {{ certificado.codigo_verificacao }}<br>
+            Valide em: {{ request.build_absolute_uri }}/validar/
+        </div>
+    </div>
+</body>
+</html>

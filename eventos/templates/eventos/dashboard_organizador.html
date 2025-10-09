@@ -1,0 +1,242 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Dashboard Organizador - SGEA{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Dashboard do Organizador
+        </h2>
+    </div>
+</div>
+
+<!-- Estatísticas Gerais -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1">Total de Eventos</h6>
+                        <h2 class="mb-0">{{ total_eventos }}</h2>
+                    </div>
+                    <i class="fas fa-calendar fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1">Eventos Ativos</h6>
+                        <h2 class="mb-0">{{ eventos_ativos }}</h2>
+                    </div>
+                    <i class="fas fa-calendar-check fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1">Total Inscrições</h6>
+                        <h2 class="mb-0">{{ total_inscricoes }}</h2>
+                    </div>
+                    <i class="fas fa-users fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1">Certificados</h6>
+                        <h2 class="mb-0">{{ total_certificados }}</h2>
+                    </div>
+                    <i class="fas fa-certificate fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ações Rápidas -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Ações Rápidas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'eventos:evento_create' %}" class="btn btn-primary w-100">
+                            <i class="fas fa-plus-circle me-2"></i>Novo Evento
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'eventos:evento_list' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-list me-2"></i>Ver Todos Eventos
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/admin/" class="btn btn-outline-secondary w-100" target="_blank">
+                            <i class="fas fa-cog me-2"></i>Admin Django
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-info w-100" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Imprimir Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Meus Eventos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-alt me-2"></i>Meus Eventos
+                </h5>
+                <a href="{% url 'eventos:evento_create' %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus me-1"></i>Novo Evento
+                </a>
+            </div>
+            <div class="card-body">
+                {% if meus_eventos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Evento</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Inscritos</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for evento in meus_eventos %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ evento.titulo }}</strong>
+                                        </td>
+                                        <td>
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ evento.data_inicio|date:"d/m/Y H:i" }}
+                                        </td>
+                                        <td>
+                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                            {{ evento.local }}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">
+                                                {{ evento.inscricoes.count }}/{{ evento.vagas }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if evento.is_ativo %}
+                                                <span class="badge bg-success">Ativo</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Encerrado</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="{% url 'eventos:evento_detail' evento.pk %}" 
+                                                   class="btn btn-outline-primary"
+                                                   title="Ver Detalhes">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{% url 'eventos:evento_update' evento.pk %}" 
+                                                   class="btn btn-outline-warning"
+                                                   title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'eventos:evento_inscritos' evento.pk %}" 
+                                                   class="btn btn-outline-info"
+                                                   title="Ver Inscritos">
+                                                    <i class="fas fa-users"></i>
+                                                </a>
+                                                <a href="{% url 'eventos:evento_delete' evento.pk %}" 
+                                                   class="btn btn-outline-danger"
+                                                   title="Excluir"
+                                                   onclick="return confirm('Tem certeza que deseja excluir este evento?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Você ainda não criou nenhum evento.
+                        <a href="{% url 'eventos:evento_create' %}" class="alert-link">Criar primeiro evento</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inscrições Recentes -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-clock me-2"></i>Inscrições Recentes
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if inscricoes_recentes %}
+                    <div class="list-group">
+                        {% for inscricao in inscricoes_recentes %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ inscricao.participante.get_full_name|default:inscricao.participante.username }}</h6>
+                                        <p class="mb-0 text-muted">
+                                            <i class="fas fa-calendar me-2"></i>
+                                            {{ inscricao.evento.titulo }} - 
+                                            Inscrito em {{ inscricao.data_inscricao|date:"d/m/Y H:i" }}
+                                        </p>
+                                    </div>
+                                    <span class="badge bg-success">Confirmado</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Nenhuma inscrição recente encontrada.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

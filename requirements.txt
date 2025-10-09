@@ -1,0 +1,32 @@
+# Core Django
+Django==4.2.7
+sqlparse==0.4.4
+
+# ASGI Server
+asgiref==3.7.2
+
+# Timezone
+pytz==2023.3.post1
+
+# Forms and Validation
+django-crispy-forms==2.1
+
+# PDF Generation (para certificados futuros)
+reportlab==4.0.7
+Pillow==10.1.0
+
+# Utilities
+python-slugify==8.0.1
+
+# Environment Variables
+python-decouple==3.8
+
+# Development Tools (opcional, mas recomendado)
+django-debug-toolbar==4.2.0
+
+# Code Quality (opcional)
+flake8==6.1.0
+
+# Production Server (para deploy futuro)
+gunicorn==21.2.0
+whitenoise==6.6.0
