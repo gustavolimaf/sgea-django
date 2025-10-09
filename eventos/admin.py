@@ -1,172 +1,201 @@
+"""
+Configuração do Django Admin para o SGEA
+"""
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.html import format_html
 from .models import Usuario, Evento, Inscricao, Certificado
 
 
 @admin.register(Usuario)
-class UsuarioAdmin(UserAdmin):
-    """
-    Configuração do admin para o modelo Usuario
-    """
-    list_display = ('username', 'email', 'first_name', 'last_name', 'perfil', 'instituicao', 'is_staff')
-    list_filter = ('perfil', 'is_staff', 'is_active', 'data_cadastro')
-    search_fields = ('username', 'first_name', 'last_name', 'email', 'instituicao')
-    ordering = ('-data_cadastro',)
+class UsuarioAdmin(BaseUserAdmin):
+    """Admin para o modelo Usuario"""
+    list_display = [
+        "username", "email", "first_name", "last_name", 
+        "perfil", "instituicao", "is_active", "data_cadastro"
+    ]
+    list_filter = ["perfil", "is_active", "is_staff", "data_cadastro"]
+    search_fields = ["username", "email", "first_name", "last_name", "instituicao"]
+    ordering = ["-data_cadastro"]
     
-    fieldsets = UserAdmin.fieldsets + (
-        ('Informações Adicionais', {
-            'fields': ('telefone', 'instituicao', 'perfil', 'data_cadastro')
+    fieldsets = BaseUserAdmin.fieldsets + (
+        ("Informações Adicionais", {
+            "fields": ("telefone", "instituicao", "perfil", "data_cadastro")
         }),
     )
     
-    readonly_fields = ('data_cadastro',)
-    
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Informações Adicionais', {
-            'fields': ('telefone', 'instituicao', 'perfil')
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ("Informações Adicionais", {
+            "fields": ("telefone", "instituicao", "perfil")
         }),
     )
+    
+    readonly_fields = ["data_cadastro"]
 
 
 @admin.register(Evento)
 class EventoAdmin(admin.ModelAdmin):
-    """
-    Configuração do admin para o modelo Evento
-    """
-    list_display = ('nome', 'tipo', 'data_inicial', 'data_final', 'local', 'vagas_totais', 'get_vagas_disponiveis', 'organizador', 'ativo')
-    list_filter = ('tipo', 'ativo', 'data_inicial', 'organizador')
-    search_fields = ('nome', 'descricao', 'local', 'organizador__username')
-    date_hierarchy = 'data_inicial'
-    ordering = ('-data_inicial',)
+    """Admin para o modelo Evento"""
+    list_display = [
+        "nome", "tipo", "data_inicial", "data_final",
+        "vagas_display", "organizador", "ativo_badge"
+    ]
+    list_filter = ["tipo", "ativo", "data_inicial", "data_criacao"]
+    search_fields = ["nome", "descricao", "local"]
+    date_hierarchy = "data_inicial"
+    ordering = ["-data_inicial"]
     
     fieldsets = (
-        ('Informações Básicas', {
-            'fields': ('tipo', 'nome', 'descricao')
+        ("Informações Básicas", {
+            "fields": ("tipo", "nome", "descricao", "ativo")
         }),
-        ('Data e Horário', {
-            'fields': ('data_inicial', 'data_final', 'horario_inicio', 'horario_fim')
+        ("Data e Horário", {
+            "fields": (
+                ("data_inicial", "data_final"),
+                ("horario_inicio", "horario_fim")
+            )
         }),
-        ('Local e Vagas', {
-            'fields': ('local', 'vagas_totais')
+        ("Local e Capacidade", {
+            "fields": ("local", "vagas_totais")
         }),
-        ('Organização', {
-            'fields': ('organizador', 'ativo')
+        ("Organização", {
+            "fields": ("organizador",)
         }),
-        ('Metadados', {
-            'fields': ('data_criacao', 'data_atualizacao'),
-            'classes': ('collapse',)
+        ("Metadados", {
+            "fields": ("data_criacao", "data_atualizacao"),
+            "classes": ("collapse",)
         }),
     )
     
-    readonly_fields = ('data_criacao', 'data_atualizacao')
+    readonly_fields = ["data_criacao", "data_atualizacao"]
     
-    def get_vagas_disponiveis(self, obj):
-        """Retorna o número de vagas disponíveis"""
-        return obj.vagas_disponiveis
-    get_vagas_disponiveis.short_description = 'Vagas Disponíveis'
+    def vagas_display(self, obj):
+        inscritos = obj.inscricoes.filter(ativa=True).count()
+        percentual = (inscritos / obj.vagas_totais) * 100 if obj.vagas_totais > 0 else 0
+        
+        if percentual >= 90:
+            color = "red"
+        elif percentual >= 70:
+            color = "orange"
+        else:
+            color = "green"
+        
+        return format_html(
+            '<span style="color: {};">{}/{} ({:.0f}%)</span>',
+            color, inscritos, obj.vagas_totais, percentual
+        )
+    vagas_display.short_description = "Vagas"
     
-    def get_queryset(self, request):
-        """Otimiza a query incluindo o organizador"""
-        qs = super().get_queryset(request)
-        return qs.select_related('organizador')
+    def ativo_badge(self, obj):
+        if obj.ativo:
+            return format_html(
+                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">✓ Ativo</span>'
+            )
+        return format_html(
+            '<span style="background-color: #ef4444; color: white; padding: 3px 10px; border-radius: 3px;">✗ Inativo</span>'
+        )
+    ativo_badge.short_description = "Status"
 
 
 @admin.register(Inscricao)
 class InscricaoAdmin(admin.ModelAdmin):
-    """
-    Configuração do admin para o modelo Inscricao
-    """
-    list_display = ('get_usuario_nome', 'get_evento_nome', 'data_inscricao', 'ativa', 'data_cancelamento')
-    list_filter = ('ativa', 'data_inscricao', 'evento__tipo')
-    search_fields = ('usuario__username', 'usuario__first_name', 'usuario__last_name', 'evento__nome')
-    date_hierarchy = 'data_inscricao'
-    ordering = ('-data_inscricao',)
+    """Admin para o modelo Inscricao"""
+    list_display = [
+        "usuario_nome", "evento_nome", "data_inscricao",
+        "ativa_badge", "tem_certificado"
+    ]
+    list_filter = ["ativa", "data_inscricao", "evento__tipo"]
+    search_fields = [
+        "usuario__first_name", "usuario__last_name",
+        "usuario__email", "evento__nome"
+    ]
+    date_hierarchy = "data_inscricao"
+    ordering = ["-data_inscricao"]
     
     fieldsets = (
-        ('Inscrição', {
-            'fields': ('usuario', 'evento', 'ativa')
+        ("Inscrição", {
+            "fields": ("usuario", "evento", "ativa")
         }),
-        ('Datas', {
-            'fields': ('data_inscricao', 'data_cancelamento'),
-            'classes': ('collapse',)
+        ("Datas", {
+            "fields": ("data_inscricao", "data_cancelamento")
         }),
     )
     
-    readonly_fields = ('data_inscricao',)
+    readonly_fields = ["data_inscricao"]
     
-    def get_usuario_nome(self, obj):
-        """Retorna o nome completo do usuário"""
-        return obj.usuario.get_full_name() or obj.usuario.username
-    get_usuario_nome.short_description = 'Usuário'
-    get_usuario_nome.admin_order_field = 'usuario__first_name'
+    def usuario_nome(self, obj):
+        return obj.usuario.get_full_name()
+    usuario_nome.short_description = "Usuário"
+    usuario_nome.admin_order_field = "usuario__first_name"
     
-    def get_evento_nome(self, obj):
-        """Retorna o nome do evento"""
+    def evento_nome(self, obj):
         return obj.evento.nome
-    get_evento_nome.short_description = 'Evento'
-    get_evento_nome.admin_order_field = 'evento__nome'
+    evento_nome.short_description = "Evento"
+    evento_nome.admin_order_field = "evento__nome"
     
-    def get_queryset(self, request):
-        """Otimiza a query incluindo usuário e evento"""
-        qs = super().get_queryset(request)
-        return qs.select_related('usuario', 'evento')
+    def ativa_badge(self, obj):
+        if obj.ativa:
+            return format_html(
+                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">✓ Ativa</span>'
+            )
+        return format_html(
+            '<span style="background-color: #6b7280; color: white; padding: 3px 10px; border-radius: 3px;">✗ Cancelada</span>'
+        )
+    ativa_badge.short_description = "Status"
     
-    actions = ['cancelar_inscricoes', 'reativar_inscricoes']
-    
-    def cancelar_inscricoes(self, request, queryset):
-        """Ação para cancelar inscrições em massa"""
-        from django.utils import timezone
-        updated = queryset.update(ativa=False, data_cancelamento=timezone.now())
-        self.message_user(request, f'{updated} inscrição(ões) cancelada(s) com sucesso.')
-    cancelar_inscricoes.short_description = 'Cancelar inscrições selecionadas'
-    
-    def reativar_inscricoes(self, request, queryset):
-        """Ação para reativar inscrições em massa"""
-        updated = queryset.update(ativa=True, data_cancelamento=None)
-        self.message_user(request, f'{updated} inscrição(ões) reativada(s) com sucesso.')
-    reativar_inscricoes.short_description = 'Reativar inscrições selecionadas'
+    def tem_certificado(self, obj):
+        if hasattr(obj, "certificado"):
+            return format_html("✓")
+        return format_html("✗")
+    tem_certificado.short_description = "Certificado"
 
 
 @admin.register(Certificado)
 class CertificadoAdmin(admin.ModelAdmin):
-    """
-    Configuração do admin para o modelo Certificado
-    """
-    list_display = ('codigo_verificacao', 'get_usuario_nome', 'get_evento_nome', 'data_emissao', 'emitido_por', 'tem_arquivo')
-    list_filter = ('data_emissao', 'inscricao__evento__tipo')
-    search_fields = ('codigo_verificacao', 'inscricao__usuario__username', 'inscricao__usuario__first_name', 'inscricao__evento__nome')
-    date_hierarchy = 'data_emissao'
-    ordering = ('-data_emissao',)
+    """Admin para o modelo Certificado"""
+    list_display = [
+        "codigo_verificacao", "participante_nome",
+        "evento_nome", "data_emissao", "emitido_por_nome"
+    ]
+    list_filter = ["data_emissao", "inscricao__evento__tipo"]
+    search_fields = [
+        "codigo_verificacao",
+        "inscricao__usuario__first_name",
+        "inscricao__usuario__last_name",
+        "inscricao__evento__nome"
+    ]
+    date_hierarchy = "data_emissao"
+    ordering = ["-data_emissao"]
     
     fieldsets = (
-        ('Certificado', {
-            'fields': ('inscricao', 'codigo_verificacao', 'emitido_por', 'arquivo_pdf')
+        ("Certificado", {
+            "fields": ("inscricao", "codigo_verificacao", "emitido_por")
         }),
-        ('Metadados', {
-            'fields': ('data_emissao',),
-            'classes': ('collapse',)
+        ("Arquivo", {
+            "fields": ("arquivo_pdf",)
+        }),
+        ("Metadados", {
+            "fields": ("data_emissao",),
+            "classes": ("collapse",)
         }),
     )
     
-    readonly_fields = ('codigo_verificacao', 'data_emissao')
+    readonly_fields = ["codigo_verificacao", "data_emissao"]
     
-    def get_usuario_nome(self, obj):
-        """Retorna o nome completo do usuário"""
-        return obj.inscricao.usuario.get_full_name() or obj.inscricao.usuario.username
-    get_usuario_nome.short_description = 'Participante'
+    def participante_nome(self, obj):
+        return obj.inscricao.usuario.get_full_name()
+    participante_nome.short_description = "Participante"
     
-    def get_evento_nome(self, obj):
-        """Retorna o nome do evento"""
+    def evento_nome(self, obj):
         return obj.inscricao.evento.nome
-    get_evento_nome.short_description = 'Evento'
+    evento_nome.short_description = "Evento"
     
-    def tem_arquivo(self, obj):
-        """Verifica se possui arquivo PDF"""
-        return bool(obj.arquivo_pdf)
-    tem_arquivo.short_description = 'Arquivo PDF'
-    tem_arquivo.boolean = True
-    
-    def get_queryset(self, request):
-        """Otimiza a query incluindo inscrição, usuário e evento"""
-        qs = super().get_queryset(request)
-        return qs.select_related('inscricao__usuario', 'inscricao__evento', 'emitido_por')
+    def emitido_por_nome(self, obj):
+        return obj.emitido_por.get_full_name()
+    emitido_por_nome.short_description = "Emitido Por"
+
+
+# Personalização do Admin Site
+admin.site.site_header = "SGEA - Administração"
+admin.site.site_title = "SGEA Admin"
+admin.site.index_title = "Gestão de Eventos Acadêmicos"

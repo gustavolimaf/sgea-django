@@ -1,23 +1,137 @@
-{% extends 'eventos/base.html' %}
+{% extends 'eventos/base.html' %}{% extends 'eventos/base.html' %}
 
-{% block title %}Login - SGEA{% endblock %}
 
-{% block content %}
-<div class="container" style="max-width: 500px;">
-    <div class="card">
-        <h1 class="card-title text-center">Entrar no SGEA</h1>
-        <p class="text-center mb-4" style="color: var(--secondary-color);">
-            Acesse sua conta para gerenciar eventos e inscrições
+
+{% block title %}Login - SGEA{% endblock %}{% block title %}Login - SGEA{% endblock %}
+
+
+
+{% block extra_css %}{% block content %}
+
+<style><div class="container" style="max-width: 500px;">
+
+    .auth-container {    <div class="card">
+
+        max-width: 450px;        <h1 class="card-title text-center">Entrar no SGEA</h1>
+
+        margin: 3rem auto;        <p class="text-center mb-4" style="color: var(--secondary-color);">
+
+    }            Acesse sua conta para gerenciar eventos e inscrições
+
         </p>
+
+    .auth-card {
+
+        background: white;        <form method="post">
+
+        border-radius: 0.5rem;            {% csrf_token %}
+
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);            
+
+        padding: 2.5rem;            <!-- Username -->
+
+    }            <div class="form-group">
+
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+
+    .auth-header {                    Nome de Usuário
+
+        text-align: center;                </label>
+
+        margin-bottom: 2rem;                {{ form.username }}
+
+    }                {% if form.username.errors %}
+
+                    <ul class="errorlist">
+
+    .auth-header h1 {                        {% for error in form.username.errors %}
+
+        font-size: 2rem;                            <li>{{ error }}</li>
+
+        color: var(--dark-text);                        {% endfor %}
+
+        margin-bottom: 0.5rem;                    </ul>
+
+    }                {% endif %}
+
+            </div>
+
+    .auth-header p {
+
+        color: var(--secondary-color);            <!-- Password -->
+
+    }            <div class="form-group">
+
+                <label for="{{ form.password.id_for_label }}" class="form-label">
+
+    .form-actions {                    Senha
+
+        display: flex;                </label>
+
+        justify-content: space-between;                {{ form.password }}
+
+        align-items: center;                {% if form.password.errors %}
+
+        margin-top: 1.5rem;                    <ul class="errorlist">
+
+    }                        {% for error in form.password.errors %}
+
+                            <li>{{ error }}</li>
+
+    .auth-link {                        {% endfor %}
+
+        text-align: center;                    </ul>
+
+        margin-top: 1.5rem;                {% endif %}
+
+        color: var(--secondary-color);            </div>
+
+    }
+
+            <!-- Erros Gerais -->
+
+    .auth-link a {            {% if form.non_field_errors %}
+
+        color: var(--primary-color);                <div class="alert alert-danger">
+
+        text-decoration: none;                    {{ form.non_field_errors }}
+
+        font-weight: 500;                </div>
+
+    }            {% endif %}
+
+
+
+    .auth-link a:hover {            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1.1rem;">
+
+        text-decoration: underline;                Entrar
+
+    }            </button>
+
+</style>        </form>
+
+{% endblock %}
+
+        <p class="text-center mt-3">
+
+{% block content %}            Não tem uma conta? <a href="{% url 'registro' %}" style="color: var(--primary-color); font-weight: 500;">Cadastre-se</a>
+
+<div class="auth-container">        </p>
+
+    <div class="auth-card">    </div>
+
+        <div class="auth-header"></div>
+
+            <h1>Entrar no SGEA</h1>{% endblock %}
+
+            <p>Acesse sua conta para gerenciar seus eventos</p>
+        </div>
 
         <form method="post">
             {% csrf_token %}
             
-            <!-- Username -->
             <div class="form-group">
-                <label for="{{ form.username.id_for_label }}" class="form-label">
-                    Nome de Usuário
-                </label>
+                <label for="id_username" class="form-label">Usuário</label>
                 {{ form.username }}
                 {% if form.username.errors %}
                     <ul class="errorlist">
@@ -28,11 +142,8 @@
                 {% endif %}
             </div>
 
-            <!-- Password -->
             <div class="form-group">
-                <label for="{{ form.password.id_for_label }}" class="form-label">
-                    Senha
-                </label>
+                <label for="id_password" class="form-label">Senha</label>
                 {{ form.password }}
                 {% if form.password.errors %}
                     <ul class="errorlist">
@@ -43,21 +154,12 @@
                 {% endif %}
             </div>
 
-            <!-- Erros Gerais -->
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1.1rem;">
-                Entrar
-            </button>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
         </form>
 
-        <p class="text-center mt-3">
-            Não tem uma conta? <a href="{% url 'registro' %}" style="color: var(--primary-color); font-weight: 500;">Cadastre-se</a>
-        </p>
+        <div class="auth-link">
+            Não tem uma conta? <a href="{% url 'registro' %}">Cadastre-se aqui</a>
+        </div>
     </div>
 </div>
 {% endblock %}

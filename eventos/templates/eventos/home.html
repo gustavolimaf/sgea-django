@@ -1,93 +1,289 @@
-{% extends 'eventos/base.html' %}
+{% extends 'eventos/base.html' %} {% block title %}Home - SGEA{% endblock %} {%
+block extra_css %}
+<style>
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    margin-bottom: 3rem;
+  }
 
-{% block title %}Início - SGEA{% endblock %}
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
 
-{% block content %}
+  .hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 1.125rem;
+    color: var(--secondary-color);
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .evento-card {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .evento-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .evento-tipo {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .evento-titulo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--dark-text);
+  }
+
+  .evento-info {
+    color: var(--secondary-color);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .evento-vagas {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .vagas-bar {
+    flex: 1;
+    height: 0.5rem;
+    background-color: #e2e8f0;
+    border-radius: 0.25rem;
+    overflow: hidden;
+  }
+
+  .vagas-fill {
+    height: 100%;
+    background-color: var(--success-color);
+    transition: width 0.3s;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    margin-top: 3rem;
+  }
+
+  .cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+</style>
+{% endblock %} {% block content %}
 <div class="container">
-    <!-- Hero Section -->
-    <div class="card text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Sistema de Gestão de Eventos Acadêmicos</h1>
-        <p style="font-size: 1.25rem; margin-bottom: 2rem;">Participe, organize e gerencie eventos acadêmicos de forma simples e eficiente</p>
-        {% if not user.is_authenticated %}
-            <div>
-                <a href="{% url 'registro' %}" class="btn btn-primary" style="margin: 0.5rem;">Cadastrar Agora</a>
-                <a href="{% url 'eventos_list' %}" class="btn btn-outline" style="margin: 0.5rem; border-color: white; color: white;">Ver Eventos</a>
-            </div>
-        {% else %}
-            <div>
-                <a href="{% url 'eventos_list' %}" class="btn btn-primary" style="margin: 0.5rem;">Ver Eventos Disponíveis</a>
-                <a href="{% url 'dashboard' %}" class="btn btn-outline" style="margin: 0.5rem; border-color: white; color: white;">Ir para Dashboard</a>
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- Estatísticas -->
-    <div class="grid grid-3 mt-4">
-        <div class="card text-center">
-            <div style="font-size: 3rem; color: var(--primary-color); font-weight: bold;">{{ total_eventos }}</div>
-            <div style="font-size: 1.25rem; color: var(--secondary-color);">Eventos Ativos</div>
-        </div>
-        <div class="card text-center">
-            <div style="font-size: 3rem; color: var(--success-color); font-weight: bold;">{{ total_usuarios }}</div>
-            <div style="font-size: 1.25rem; color: var(--secondary-color);">Usuários Cadastrados</div>
-        </div>
-        <div class="card text-center">
-            <div style="font-size: 3rem; color: var(--warning-color); font-weight: bold;">{{ eventos_proximos|length }}</div>
-            <div style="font-size: 1.25rem; color: var(--secondary-color);">Eventos Próximos</div>
-        </div>
-    </div>
-
-    <!-- Eventos Próximos -->
-    {% if eventos_proximos %}
-    <div class="mt-4">
-        <h2 class="card-title" style="text-align: center; margin-bottom: 2rem;">Próximos Eventos</h2>
-        <div class="grid grid-3">
-            {% for evento in eventos_proximos %}
-            <div class="card">
-                <div class="badge badge-primary mb-2">{{ evento.get_tipo_display }}</div>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">{{ evento.nome }}</h3>
-                <p style="color: var(--secondary-color); margin-bottom: 1rem;">
-                    {{ evento.descricao|truncatewords:20 }}
-                </p>
-                <div style="margin-bottom: 0.5rem;">
-                    <strong>📅 Data:</strong> {{ evento.data_inicial|date:"d/m/Y" }}
-                </div>
-                <div style="margin-bottom: 0.5rem;">
-                    <strong>📍 Local:</strong> {{ evento.local }}
-                </div>
-                <div style="margin-bottom: 1rem;">
-                    <strong>👥 Vagas:</strong> {{ evento.vagas_disponiveis }} de {{ evento.vagas_totais }}
-                </div>
-                <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-primary" style="width: 100%;">Ver Detalhes</a>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'eventos_list' %}" class="btn btn-outline">Ver Todos os Eventos</a>
-        </div>
-    </div>
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Sistema de Gestão de Eventos Acadêmicos</h1>
+    <p>Organize, participe e gerencie eventos acadêmicos com facilidade</p>
+    {% if not user.is_authenticated %}
+    <a
+      href="{% url 'registro' %}"
+      class="btn btn-outline"
+      style="border-color: white; color: white"
+      >Começar Agora</a
+    >
+    {% else %}
+    <a
+      href="{% url 'eventos_list' %}"
+      class="btn btn-outline"
+      style="border-color: white; color: white"
+      >Ver Eventos</a
+    >
     {% endif %}
+  </div>
 
-    <!-- Features -->
-    <div class="mt-4">
-        <h2 class="card-title" style="text-align: center; margin-bottom: 2rem;">Por que usar o SGEA?</h2>
-        <div class="grid grid-3">
-            <div class="card text-center">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Eventos Acadêmicos</h3>
-                <p style="color: var(--secondary-color);">Acesse uma variedade de seminários, palestras, minicursos e semanas acadêmicas</p>
-            </div>
-            <div class="card text-center">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Inscrições Simples</h3>
-                <p style="color: var(--secondary-color);">Faça sua inscrição em eventos de forma rápida e segura</p>
-            </div>
-            <div class="card text-center">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Certificados Digitais</h3>
-                <p style="color: var(--secondary-color);">Receba certificados digitais de participação após os eventos</p>
-            </div>
-        </div>
+  <!-- Stats Section -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number">{{ total_eventos }}</div>
+      <div class="stat-label">Eventos Ativos</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ total_usuarios }}</div>
+      <div class="stat-label">Usuários Cadastrados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Gratuito</div>
+    </div>
+  </div>
+
+  <!-- Próximos Eventos -->
+  {% if eventos_proximos %}
+  <h2 class="section-title">Próximos Eventos</h2>
+  <div class="grid grid-3">
+    {% for evento in eventos_proximos %}
+    <div class="evento-card">
+      <span class="evento-tipo">{{ evento.get_tipo_display }}</span>
+      <h3 class="evento-titulo">{{ evento.nome }}</h3>
+      <p class="evento-info">📅 {{ evento.data_inicial|date:"d/m/Y" }}</p>
+      <p class="evento-info">⏰ {{ evento.horario_inicio|time:"H:i" }}</p>
+      <p class="evento-info">📍 {{ evento.local }}</p>
+
+      <div class="evento-vagas">
+        <span style="font-size: 0.875rem"
+          >{{ evento.vagas_disponiveis }} vagas</span
+        >
+        <div class="vagas-bar">
+          <div
+            class="vagas-fill"
+            style="width: {{ evento.vagas_disponiveis|divisibleby:evento.vagas_totais }}%;"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <a
+          href="{% url 'evento_detail' evento.pk %}"
+          class="btn btn-primary"
+          style="width: 100%"
+          >Ver Detalhes</a
+        >
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'eventos_list' %}" class="btn btn-outline"
+      >Ver Todos os Eventos</a
+    >
+  </div>
+  {% endif %}
+
+  <!-- Features Section -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3 class="feature-title">Eventos Acadêmicos</h3>
+      <p>
+        Seminários, palestras, minicursos e semanas acadêmicas em um só lugar
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <h3 class="feature-title">Inscrições Fáceis</h3>
+      <p>Inscreva-se em eventos com apenas alguns cliques</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎓</div>
+      <h3 class="feature-title">Certificados Digitais</h3>
+      <p>Receba certificados de participação automaticamente</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <h3 class="feature-title">Gestão Completa</h3>
+      <p>Organizadores têm controle total sobre seus eventos</p>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  {% if not user.is_authenticated %}
+  <div class="cta-section">
+    <h2>Pronto para começar?</h2>
+    <p>
+      Cadastre-se gratuitamente e comece a participar de eventos acadêmicos
+      agora mesmo!
+    </p>
+    <a
+      href="{% url 'registro' %}"
+      class="btn"
+      style="background-color: white; color: var(--primary-color)"
+      >Criar Conta Gratuita</a
+    >
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
