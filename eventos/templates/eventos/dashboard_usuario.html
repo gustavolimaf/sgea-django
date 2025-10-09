@@ -1,0 +1,97 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Dashboard - SGEA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Bem-vindo, {{ usuario.get_full_name }}!</h1>
+
+    <!-- Estatísticas -->
+    <div class="grid grid-3 mb-4">
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; color: var(--primary-color); font-weight: bold;">{{ total_inscricoes }}</div>
+            <div style="font-size: 1.1rem; color: var(--secondary-color);">Inscrições Ativas</div>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; color: var(--success-color); font-weight: bold;">{{ certificados }}</div>
+            <div style="font-size: 1.1rem; color: var(--secondary-color);">Certificados</div>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; color: var(--warning-color); font-weight: bold;">{{ inscricoes_ativas|length }}</div>
+            <div style="font-size: 1.1rem; color: var(--secondary-color);">Eventos Próximos</div>
+        </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="card mb-4">
+        <h2 class="card-title">Ações Rápidas</h2>
+        <div class="grid grid-3">
+            <a href="{% url 'eventos_list' %}" class="btn btn-primary" style="padding: 1rem;">
+                📚 Ver Eventos Disponíveis
+            </a>
+            <a href="{% url 'minhas_inscricoes' %}" class="btn btn-outline" style="padding: 1rem;">
+                📋 Minhas Inscrições
+            </a>
+            <a href="{% url 'meus_certificados' %}" class="btn btn-outline" style="padding: 1rem;">
+                🎓 Meus Certificados
+            </a>
+        </div>
+    </div>
+
+    <!-- Minhas Inscrições Ativas -->
+    {% if inscricoes_ativas %}
+    <div class="card">
+        <h2 class="card-title">Minhas Inscrições Ativas</h2>
+        <div class="grid grid-2">
+            {% for inscricao in inscricoes_ativas %}
+            <div class="card" style="background-color: var(--light-bg);">
+                <div class="badge badge-primary mb-2">{{ inscricao.evento.get_tipo_display }}</div>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                    {{ inscricao.evento.nome }}
+                </h3>
+                <p style="color: var(--secondary-color); margin-bottom: 1rem;">
+                    {{ inscricao.evento.descricao|truncatewords:15 }}
+                </p>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>📅 Data:</strong> {{ inscricao.evento.data_inicial|date:"d/m/Y" }}
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>⏰ Horário:</strong> {{ inscricao.evento.horario_inicio|time:"H:i" }} - {{ inscricao.evento.horario_fim|time:"H:i" }}
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>📍 Local:</strong> {{ inscricao.evento.local }}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>✅ Inscrito em:</strong> {{ inscricao.data_inscricao|date:"d/m/Y H:i" }}
+                </div>
+                <div class="grid grid-2" style="gap: 0.5rem;">
+                    <a href="{% url 'evento_detail' inscricao.evento.pk %}" class="btn btn-primary">
+                        Ver Detalhes
+                    </a>
+                    <a href="{% url 'inscricao_cancelar' inscricao.pk %}" class="btn btn-danger">
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'minhas_inscricoes' %}" class="btn btn-outline">
+                Ver Todas as Inscrições
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="card text-center">
+        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">📚</div>
+        <h3 style="margin-bottom: 1rem;">Você não possui inscrições ativas</h3>
+        <p style="color: var(--secondary-color); margin-bottom: 2rem;">
+            Explore os eventos disponíveis e faça sua inscrição!
+        </p>
+        <a href="{% url 'eventos_list' %}" class="btn btn-primary">
+            Ver Eventos Disponíveis
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

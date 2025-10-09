@@ -1,0 +1,172 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Cadastro - SGEA{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div class="card">
+        <h1 class="card-title text-center">Cadastre-se no SGEA</h1>
+        <p class="text-center mb-4" style="color: var(--secondary-color);">
+            Crie sua conta para participar de eventos acadêmicos
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    Nome de Usuário *
+                </label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <small class="form-text">Escolha um nome de usuário único</small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">
+                    E-mail *
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Nome -->
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                    Nome *
+                </label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.first_name.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Sobrenome -->
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                    Sobrenome *
+                </label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.last_name.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Telefone -->
+            <div class="form-group">
+                <label for="{{ form.telefone.id_for_label }}" class="form-label">
+                    Telefone *
+                </label>
+                {{ form.telefone }}
+                {% if form.telefone.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.telefone.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <small class="form-text">Ex: +5511999999999</small>
+            </div>
+
+            <!-- Perfil -->
+            <div class="form-group">
+                <label for="{{ form.perfil.id_for_label }}" class="form-label">
+                    Perfil *
+                </label>
+                {{ form.perfil }}
+                {% if form.perfil.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.perfil.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Instituição -->
+            <div class="form-group">
+                <label for="{{ form.instituicao.id_for_label }}" class="form-label">
+                    Instituição
+                </label>
+                {{ form.instituicao }}
+                {% if form.instituicao.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.instituicao.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <small class="form-text">Obrigatório para alunos e professores</small>
+            </div>
+
+            <!-- Senha -->
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                    Senha *
+                </label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password1.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <small class="form-text">Mínimo de 8 caracteres</small>
+            </div>
+
+            <!-- Confirmar Senha -->
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                    Confirme a Senha *
+                </label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password2.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Erros Gerais -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1.1rem;">
+                Cadastrar
+            </button>
+        </form>
+
+        <p class="text-center mt-3">
+            Já tem uma conta? <a href="{% url 'login' %}" style="color: var(--primary-color); font-weight: 500;">Faça login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

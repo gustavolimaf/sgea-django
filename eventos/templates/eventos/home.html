@@ -1,0 +1,93 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Início - SGEA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="card text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem;">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Sistema de Gestão de Eventos Acadêmicos</h1>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">Participe, organize e gerencie eventos acadêmicos de forma simples e eficiente</p>
+        {% if not user.is_authenticated %}
+            <div>
+                <a href="{% url 'registro' %}" class="btn btn-primary" style="margin: 0.5rem;">Cadastrar Agora</a>
+                <a href="{% url 'eventos_list' %}" class="btn btn-outline" style="margin: 0.5rem; border-color: white; color: white;">Ver Eventos</a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{% url 'eventos_list' %}" class="btn btn-primary" style="margin: 0.5rem;">Ver Eventos Disponíveis</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline" style="margin: 0.5rem; border-color: white; color: white;">Ir para Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="grid grid-3 mt-4">
+        <div class="card text-center">
+            <div style="font-size: 3rem; color: var(--primary-color); font-weight: bold;">{{ total_eventos }}</div>
+            <div style="font-size: 1.25rem; color: var(--secondary-color);">Eventos Ativos</div>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 3rem; color: var(--success-color); font-weight: bold;">{{ total_usuarios }}</div>
+            <div style="font-size: 1.25rem; color: var(--secondary-color);">Usuários Cadastrados</div>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 3rem; color: var(--warning-color); font-weight: bold;">{{ eventos_proximos|length }}</div>
+            <div style="font-size: 1.25rem; color: var(--secondary-color);">Eventos Próximos</div>
+        </div>
+    </div>
+
+    <!-- Eventos Próximos -->
+    {% if eventos_proximos %}
+    <div class="mt-4">
+        <h2 class="card-title" style="text-align: center; margin-bottom: 2rem;">Próximos Eventos</h2>
+        <div class="grid grid-3">
+            {% for evento in eventos_proximos %}
+            <div class="card">
+                <div class="badge badge-primary mb-2">{{ evento.get_tipo_display }}</div>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">{{ evento.nome }}</h3>
+                <p style="color: var(--secondary-color); margin-bottom: 1rem;">
+                    {{ evento.descricao|truncatewords:20 }}
+                </p>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>📅 Data:</strong> {{ evento.data_inicial|date:"d/m/Y" }}
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>📍 Local:</strong> {{ evento.local }}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>👥 Vagas:</strong> {{ evento.vagas_disponiveis }} de {{ evento.vagas_totais }}
+                </div>
+                <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-primary" style="width: 100%;">Ver Detalhes</a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'eventos_list' %}" class="btn btn-outline">Ver Todos os Eventos</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Features -->
+    <div class="mt-4">
+        <h2 class="card-title" style="text-align: center; margin-bottom: 2rem;">Por que usar o SGEA?</h2>
+        <div class="grid grid-3">
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Eventos Acadêmicos</h3>
+                <p style="color: var(--secondary-color);">Acesse uma variedade de seminários, palestras, minicursos e semanas acadêmicas</p>
+            </div>
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Inscrições Simples</h3>
+                <p style="color: var(--secondary-color);">Faça sua inscrição em eventos de forma rápida e segura</p>
+            </div>
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">Certificados Digitais</h3>
+                <p style="color: var(--secondary-color);">Receba certificados digitais de participação após os eventos</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
