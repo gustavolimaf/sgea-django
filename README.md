@@ -66,8 +66,20 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 - **Python 3.8+** - Linguagem de programação
 - **Django 4.2+** - Framework web
 - **SQLite** - Banco de dados
-- **HTML5/CSS3** - Frontend
+- **HTML5/CSS3** - Frontend modular e responsivo
 - **ReportLab/WeasyPrint** - Geração de PDFs
+
+### Arquitetura CSS
+
+O projeto utiliza CSS modular organizado em arquivos separados:
+
+- **base.css** - Estilos globais, componentes reutilizáveis e variáveis CSS
+- **home.css** - Estilos específicos da página inicial
+- **dashboard.css** - Estilos para dashboards de usuários
+- **evento-inscritos.css** - Estilos para gerenciamento de inscritos
+- **certificado.css** - Estilos otimizados para geração de PDFs
+
+📁 Veja mais detalhes em: `static/css/README.md`
 
 ## 🚀 Instalação
 

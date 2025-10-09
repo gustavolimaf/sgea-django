@@ -1,0 +1,160 @@
+/* ====================
+   SGEA - Certificate PDF Styles
+   ==================== */
+
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+.certificado-container {
+  width: 280mm;
+  height: 195mm;
+  margin: 5mm auto;
+  padding: 20mm;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 10px solid #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.certificado-header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.certificado-logo {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.certificado-titulo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.certificado-body {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.certificado-texto {
+  font-size: 1.2rem;
+  line-height: 2;
+  color: var(--dark-text);
+}
+
+.certificado-nome {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin: 20px 0;
+  text-decoration: underline;
+}
+
+.certificado-evento {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--dark-text);
+  margin: 20px 0;
+}
+
+.certificado-carga {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin: 10px 0;
+}
+
+.certificado-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  color: white;
+  margin-top: 30px;
+}
+
+.assinatura {
+  text-align: center;
+  flex: 1;
+}
+
+.linha-assinatura {
+  border-top: 2px solid white;
+  margin-bottom: 10px;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nome-assinatura {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.cargo-assinatura {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.certificado-codigo {
+  position: absolute;
+  bottom: 10mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: white;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ====================
+   Ornamental Decorations
+   ==================== */
+.ornamento {
+  position: absolute;
+  font-size: 3rem;
+  color: white;
+  opacity: 0.3;
+}
+
+.ornamento.top-left {
+  top: 10mm;
+  left: 10mm;
+}
+
+.ornamento.top-right {
+  top: 10mm;
+  right: 10mm;
+}
+
+.ornamento.bottom-left {
+  bottom: 15mm;
+  left: 10mm;
+}
+
+.ornamento.bottom-right {
+  bottom: 15mm;
+  right: 10mm;
+}
+
+/* ====================
+   Print Optimization
+   ==================== */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .certificado-container {
+    page-break-after: always;
+  }
+}
