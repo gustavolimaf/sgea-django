@@ -177,7 +177,3 @@ Este projeto está sob a licença MIT.
 ## 👥 Autor
 
 **Gustavo Lima** - [@gustavolimaf](https://github.com/gustavolimaf)
-
----
-
-**Desenvolvido com ❤️ usando Django**
