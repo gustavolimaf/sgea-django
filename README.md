@@ -186,6 +186,10 @@ Contribuições são bem-vindas! Siga o padrão PEP 8 e inclua testes para novas
 
 Este projeto está sob a licença MIT.
 
-## 👥 Autor
+## 👥 Autores
 
 **Gustavo Lima** - [@gustavolimaf](https://github.com/gustavolimaf)
+
+**Lucas Villas** - [@Lucasvillas](https://github.com/Lucasvillas)
+
+**Sabrina Vianna** - [@littlesabs](https://github.com/LittleSabs)
