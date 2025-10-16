@@ -152,6 +152,7 @@ class Evento(models.Model):
             models.Index(fields=['data_inicial']),
             models.Index(fields=['tipo']),
             models.Index(fields=['organizador']),
+            models.Index(fields=['ativo']),
         ]
     
     def __str__(self):

@@ -50,22 +50,22 @@ Tabela que armazena os eventos acadêmicos.
 
 **Campos:**
 
-| Campo            | Tipo         | Restrições          | Descrição                 |
-| ---------------- | ------------ | ------------------- | ------------------------- |
-| id               | INTEGER      | PK, AUTO_INCREMENT  | Identificador único       |
-| tipo             | VARCHAR(20)  | NOT NULL            | Tipo do evento            |
-| nome             | VARCHAR(200) | NOT NULL            | Nome do evento            |
-| descricao        | TEXT         | NOT NULL            | Descrição detalhada       |
-| data_inicial     | DATE         | NOT NULL            | Data de início            |
-| data_final       | DATE         | NOT NULL            | Data de término           |
-| horario_inicio   | TIME         | NOT NULL            | Horário de início         |
-| horario_fim      | TIME         | NOT NULL            | Horário de término        |
-| local            | VARCHAR(300) | NOT NULL            | Local do evento           |
-| vagas_totais     | INTEGER      | NOT NULL            | Total de vagas            |
-| organizador_id   | INTEGER      | FK, NOT NULL        | Referência ao organizador |
-| ativo            | BOOLEAN      | NOT NULL, DEFAULT 1 | Status do evento          |
-| data_criacao     | DATETIME     | NOT NULL            | Data de criação           |
-| data_atualizacao | DATETIME     | NOT NULL            | Última atualização        |
+| Campo            | Tipo         | Restrições          | Descrição                 | On Delete |
+| ---------------- | ------------ | ------------------- | ------------------------- | --------- |
+| id               | INTEGER      | PK, AUTO_INCREMENT  | Identificador único       | -         |
+| tipo             | VARCHAR(20)  | NOT NULL            | Tipo do evento            | -         |
+| nome             | VARCHAR(200) | NOT NULL            | Nome do evento            | -         |
+| descricao        | TEXT         | NOT NULL            | Descrição detalhada       | -         |
+| data_inicial     | DATE         | NOT NULL            | Data de início            | -         |
+| data_final       | DATE         | NOT NULL            | Data de término           | -         |
+| horario_inicio   | TIME         | NOT NULL            | Horário de início         | -         |
+| horario_fim      | TIME         | NOT NULL            | Horário de término        | -         |
+| local            | VARCHAR(300) | NOT NULL            | Local do evento           | -         |
+| vagas_totais     | INTEGER      | NOT NULL            | Total de vagas            | -         |
+| organizador_id   | INTEGER      | FK, NOT NULL        | Referência ao organizador | PROTECT   |
+| ativo            | BOOLEAN      | NOT NULL, DEFAULT 1 | Status do evento          | -         |
+| data_criacao     | DATETIME     | NOT NULL            | Data de criação           | -         |
+| data_atualizacao | DATETIME     | NOT NULL            | Última atualização        | -         |
 
 **Índices:**
 
@@ -89,14 +89,14 @@ Tabela que registra as inscrições de usuários em eventos.
 
 **Campos:**
 
-| Campo             | Tipo     | Restrições          | Descrição              |
-| ----------------- | -------- | ------------------- | ---------------------- |
-| id                | INTEGER  | PK, AUTO_INCREMENT  | Identificador único    |
-| usuario_id        | INTEGER  | FK, NOT NULL        | Referência ao usuário  |
-| evento_id         | INTEGER  | FK, NOT NULL        | Referência ao evento   |
-| data_inscricao    | DATETIME | NOT NULL            | Data/hora da inscrição |
-| ativa             | BOOLEAN  | NOT NULL, DEFAULT 1 | Status da inscrição    |
-| data_cancelamento | DATETIME | NULL                | Data do cancelamento   |
+| Campo             | Tipo     | Restrições          | Descrição              | On Delete |
+| ----------------- | -------- | ------------------- | ---------------------- | --------- |
+| id                | INTEGER  | PK, AUTO_INCREMENT  | Identificador único    | -         |
+| usuario_id        | INTEGER  | FK, NOT NULL        | Referência ao usuário  | CASCADE   |
+| evento_id         | INTEGER  | FK, NOT NULL        | Referência ao evento   | CASCADE   |
+| data_inscricao    | DATETIME | NOT NULL            | Data/hora da inscrição | -         |
+| ativa             | BOOLEAN  | NOT NULL, DEFAULT 1 | Status da inscrição    | -         |
+| data_cancelamento | DATETIME | NULL                | Data do cancelamento   | -         |
 
 **Índices:**
 
@@ -117,14 +117,14 @@ Tabela que armazena os certificados emitidos.
 
 **Campos:**
 
-| Campo              | Tipo         | Restrições           | Descrição                   |
-| ------------------ | ------------ | -------------------- | --------------------------- |
-| id                 | INTEGER      | PK, AUTO_INCREMENT   | Identificador único         |
-| inscricao_id       | INTEGER      | FK, NOT NULL, UNIQUE | Referência à inscrição      |
-| codigo_verificacao | VARCHAR(50)  | NOT NULL, UNIQUE     | Código único de verificação |
-| data_emissao       | DATETIME     | NOT NULL             | Data de emissão             |
-| emitido_por_id     | INTEGER      | FK, NOT NULL         | Organizador que emitiu      |
-| arquivo_pdf        | VARCHAR(100) | NULL                 | Caminho do arquivo PDF      |
+| Campo              | Tipo         | Restrições           | Descrição                        | On Delete |
+| ------------------ | ------------ | -------------------- | -------------------------------- | --------- |
+| id                 | INTEGER      | PK, AUTO_INCREMENT   | Identificador único              | -         |
+| inscricao_id       | INTEGER      | FK, NOT NULL, UNIQUE | Referência à inscrição           | CASCADE   |
+| codigo_verificacao | VARCHAR(50)  | NOT NULL, UNIQUE     | Código único de verificação      | -         |
+| data_emissao       | DATETIME     | NOT NULL             | Data de emissão                  | -         |
+| emitido_por_id     | INTEGER      | FK, NOT NULL         | Organizador que emitiu           | PROTECT   |
+| arquivo_pdf        | VARCHAR(100) | NULL                 | Caminho do PDF (FileField/media) | -         |
 
 **Índices:**
 
@@ -240,14 +240,55 @@ Tabela que armazena os certificados emitidos.
 
 ## Regras de Integridade
 
-### Constraints
+### Constraints de Banco de Dados
 
 1. **Perfil válido**: perfil deve ser 'ALUNO', 'PROFESSOR' ou 'ORGANIZADOR'
 2. **Tipo de evento válido**: tipo deve ser 'SEMINARIO', 'PALESTRA', 'MINICURSO' ou 'SEMANA_ACADEMICA'
 3. **Vagas positivas**: vagas_totais > 0
 4. **Datas válidas**: data_final >= data_inicial
-5. **Inscrição única**: Um usuário não pode se inscrever duas vezes no mesmo evento
-6. **Certificado único**: Uma inscrição só pode ter um certificado
+5. **Inscrição única**: Um usuário não pode se inscrever duas vezes no mesmo evento (UNIQUE constraint)
+6. **Certificado único**: Uma inscrição só pode ter um certificado (OneToOne relationship)
+
+### Validações de Negócio (Implementadas no Código)
+
+1. **Instituição obrigatória**: Campo `instituicao` é obrigatório para usuários com perfil ALUNO ou PROFESSOR (exceto superusuários e staff)
+
+2. **Horário válido**: Em eventos de um único dia (data_inicial = data_final), o horário de término deve ser posterior ao horário de início
+
+3. **Evento já ocorrido**: Não é permitido se inscrever em eventos cuja data final já passou
+
+4. **Vagas disponíveis**: Não é permitido se inscrever em eventos lotados (vagas_disponiveis <= 0)
+
+5. **Inscrição ativa**: Certificados só podem ser emitidos para inscrições com status `ativa=True`
+
+6. **Autorização para emitir**: Apenas o organizador do evento pode emitir certificados para aquele evento
+
+7. **Código único**: Certificados recebem automaticamente um código de verificação único (UUID) se não fornecido
+
+---
+
+## Properties e Métodos Calculados
+
+### Modelo Evento
+
+| Property/Método   | Tipo | Descrição                                                               |
+| ----------------- | ---- | ----------------------------------------------------------------------- |
+| vagas_disponiveis | int  | Retorna o número de vagas disponíveis (vagas_totais - inscritos ativos) |
+| esta_lotado       | bool | Retorna True se não há mais vagas disponíveis                           |
+| ja_ocorreu        | bool | Retorna True se a data_final já passou                                  |
+| duracao_horas     | int  | Calcula a duração total do evento em horas                              |
+
+### Modelo Inscricao
+
+| Método   | Retorno | Descrição                                                   |
+| -------- | ------- | ----------------------------------------------------------- |
+| cancelar | None    | Marca a inscrição como inativa e registra data_cancelamento |
+
+### Modelo Certificado
+
+| Método | Retorno | Descrição                                                     |
+| ------ | ------- | ------------------------------------------------------------- |
+| save   | None    | Gera automaticamente código_verificacao (UUID) se não existir |
 
 ---
 
@@ -256,9 +297,23 @@ Tabela que armazena os certificados emitidos.
 1. **SQLite** foi escolhido para facilitar desenvolvimento e testes
 2. Todos os campos de data/hora usam timezone-aware do Django
 3. Senhas são armazenadas com PBKDF2 SHA256 (padrão Django)
-4. Índices foram criados em campos frequentemente consultados
-5. Foreign Keys com CASCADE e RESTRICT foram estrategicamente definidas
+4. Índices foram criados em campos frequentemente consultados para otimizar queries
+5. Foreign Keys com CASCADE e PROTECT foram estrategicamente definidas:
+   - **CASCADE**: Quando o registro pai é deletado, os filhos também são (inscrições e certificados)
+   - **PROTECT**: Impede a deleção se houver registros relacionados (organizador de evento, emissor de certificado)
+6. O campo `arquivo_pdf` usa FileField do Django, armazenado em `media/certificados/YYYY/MM/`
+
+### Pendências de Migration
+
+⚠️ **Importante**: Após atualizar o código, execute:
+
+```bash
+python manage.py makemigrations eventos --name add_ativo_index
+python manage.py migrate
+```
+
+Isso criará o índice no campo `ativo` da tabela `eventos_evento`.
 
 ---
 
-**Última atualização**: Outubro 2025
+**Última atualização**: 16 de Outubro de 2025
