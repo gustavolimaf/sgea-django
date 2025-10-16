@@ -89,10 +89,10 @@ class EventoAdmin(admin.ModelAdmin):
     def ativo_badge(self, obj):
         if obj.ativo:
             return format_html(
-                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">✓ Ativo</span>'
+                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">Ativo</span>'
             )
         return format_html(
-            '<span style="background-color: #ef4444; color: white; padding: 3px 10px; border-radius: 3px;">✗ Inativo</span>'
+            '<span style="background-color: #ef4444; color: white; padding: 3px 10px; border-radius: 3px;">Inativo</span>'
         )
     ativo_badge.short_description = "Status"
 
@@ -136,17 +136,17 @@ class InscricaoAdmin(admin.ModelAdmin):
     def ativa_badge(self, obj):
         if obj.ativa:
             return format_html(
-                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">✓ Ativa</span>'
+                '<span style="background-color: #10b981; color: white; padding: 3px 10px; border-radius: 3px;">Ativa</span>'
             )
         return format_html(
-            '<span style="background-color: #6b7280; color: white; padding: 3px 10px; border-radius: 3px;">✗ Cancelada</span>'
+            '<span style="background-color: #6b7280; color: white; padding: 3px 10px; border-radius: 3px;">Cancelada</span>'
         )
     ativa_badge.short_description = "Status"
     
     def tem_certificado(self, obj):
         if hasattr(obj, "certificado"):
-            return format_html("✓")
-        return format_html("✗")
+            return format_html("Sim")
+        return format_html("Não")
     tem_certificado.short_description = "Certificado"
 
 

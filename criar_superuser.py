@@ -13,7 +13,7 @@ User = get_user_model()
 
 # Verificar se já existe
 if User.objects.filter(username='admin').exists():
-    print("❌ Superusuário 'admin' já existe!")
+    print("Superusuário 'admin' já existe!")
 else:
     User.objects.create_superuser(
         username='admin',
@@ -24,6 +24,6 @@ else:
         perfil='ORGANIZADOR',
         telefone='+5511999999999'
     )
-    print("✅ Superusuário criado com sucesso!")
+    print("Superusuário criado com sucesso!")
     print("   Usuário: admin")
     print("   Senha: admin123")
