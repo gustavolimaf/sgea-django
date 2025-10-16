@@ -113,13 +113,15 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <a href="{% url 'eventos:evento_detail' inscricao.evento.pk %}" 
+                            <!-- CORREÇÃO: Removido namespace 'eventos:' -->
+                            <a href="{% url 'evento_detail' inscricao.evento.pk %}" 
                                class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-eye me-2"></i>Ver Detalhes
                             </a>
                             
                             {% if inscricao.certificado %}
-                                <a href="{% url 'eventos:certificado_download' inscricao.certificado.pk %}" 
+                                <!-- CORREÇÃO: Removido namespace 'eventos:' -->
+                                <a href="{% url 'certificado_download' inscricao.certificado.pk %}" 
                                    class="btn btn-sm btn-success"
                                    target="_blank">
                                     <i class="fas fa-download me-2"></i>Baixar Certificado
@@ -131,7 +133,8 @@
                             {% endif %}
                             
                             {% if not inscricao.evento.evento_finalizado %}
-                                <a href="{% url 'eventos:inscricao_cancelar' inscricao.evento.pk %}" 
+                                <!-- CORREÇÃO: Removido namespace 'eventos:' -->
+                                <a href="{% url 'inscricao_cancelar' inscricao.evento.pk %}" 
                                    class="btn btn-sm btn-outline-danger"
                                    onclick="return confirm('Tem certeza que deseja cancelar sua inscrição?')">
                                     <i class="fas fa-times me-2"></i>Cancelar Inscrição
@@ -178,7 +181,8 @@
     <div class="alert alert-info">
         <i class="fas fa-info-circle me-2"></i>
         Você ainda não possui inscrições em eventos.
-        <a href="{% url 'eventos:evento_list' %}" class="alert-link">Ver eventos disponíveis</a>
+        <!-- CORREÇÃO: Removido namespace 'eventos:' -->
+        <a href="{% url 'evento_list' %}" class="alert-link">Ver eventos disponíveis</a>
     </div>
 {% endif %}
 {% endblock %}

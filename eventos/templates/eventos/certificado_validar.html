@@ -1,0 +1,56 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Validar Certificado - SGEA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-check-circle me-2"></i>Validar Certificado
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Digite o código de verificação do certificado para validar sua autenticidade.
+                </p>
+                
+                <form method="get" action="{% url 'eventos:certificado_validar' '00000000-0000-0000-0000-000000000000' %}" id="validarForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="codigo" class="form-label">Código de Verificação</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="codigo" 
+                               name="codigo" 
+                               placeholder="Ex: 12345678-1234-1234-1234-123456789abc"
+                               required>
+                        <div class="form-text">
+                            O código pode ser encontrado no rodapé do certificado.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-2"></i>Validar Certificado
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('validarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var codigo = document.getElementById('codigo').value;
+    var url = "{% url 'eventos:certificado_validar' '00000000-0000-0000-0000-000000000000' %}";
+    url = url.replace('00000000-0000-0000-0000-000000000000', codigo);
+    window.location.href = url;
+});
+</script>
+{% endblock %}

@@ -454,6 +454,26 @@ def evento_inscritos(request, pk):
 
 
 @login_required
+def certificado_validar_form(request):
+    """Formulário para validação de certificados"""
+    return render(request, 'eventos/certificado_validar.html')
+
+@login_required
+def certificado_validar(request, codigo):
+    """Validação de certificado por código"""
+    try:
+        certificado = Certificado.objects.get(codigo_verificacao=codigo)
+        return render(request, 'eventos/certificado_validacao.html', {
+            'certificado': certificado,
+            'valido': True
+        })
+    except Certificado.DoesNotExist:
+        return render(request, 'eventos/certificado_validacao.html', {
+            'valido': False,
+            'codigo': codigo
+        })
+
+@login_required
 def meus_certificados(request):
     """
     Lista de certificados do usuário

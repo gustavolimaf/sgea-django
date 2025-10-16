@@ -1,0 +1,54 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Resultado da Validação - SGEA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header {% if valido %}bg-success{% else %}bg-danger{% endif %} text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-{% if valido %}check{% else %}times{% endif %}-circle me-2"></i>
+                    Resultado da Validação
+                </h4>
+            </div>
+            <div class="card-body text-center">
+                {% if valido %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <h4>Certificado Válido!</h4>
+                        <p class="mb-0">O certificado foi verificado e é autêntico.</p>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-body text-start">
+                            <h5>Informações do Certificado</h5>
+                            <p><strong>Participante:</strong> {{ certificado.participante.get_full_name }}</p>
+                            <p><strong>Evento:</strong> {{ certificado.evento.titulo }}</p>
+                            <p><strong>Data do Evento:</strong> {{ certificado.evento.data_inicio|date:"d/m/Y" }}</p>
+                            <p><strong>Carga Horária:</strong> {{ certificado.evento.carga_horaria }} horas</p>
+                            <p><strong>Data de Emissão:</strong> {{ certificado.data_emissao|date:"d/m/Y" }}</p>
+                            <p><strong>Código:</strong> <code>{{ certificado.codigo_verificacao }}</code></p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle fa-3x mb-3"></i>
+                        <h4>Certificado Inválido!</h4>
+                        <p class="mb-0">O código <strong>{{ codigo }}</strong> não corresponde a nenhum certificado válido em nosso sistema.</p>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <a href="{% url 'eventos:certificado_validar_form' %}" class="btn btn-primary">
+                        <i class="fas fa-redo me-2"></i>Validar Outro Certificado
+                    </a>
+                    <a href="{% url 'eventos:home' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i>Página Inicial
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

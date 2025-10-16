@@ -74,13 +74,13 @@
 
                         <div class="d-grid gap-2">
                             <a href="{% url 'eventos:certificado_download' certificado.pk %}" 
-                               class="btn btn-success"
-                               target="_blank">
+                            class="btn btn-success"
+                            target="_blank">
                                 <i class="fas fa-download me-2"></i>Baixar PDF
                             </a>
                             <a href="{% url 'eventos:certificado_validar' certificado.codigo_verificacao %}" 
-                               class="btn btn-outline-info btn-sm"
-                               target="_blank">
+                                class="btn btn-outline-info btn-sm"
+                                target="_blank">
                                 <i class="fas fa-check me-2"></i>Validar Certificado
                             </a>
                             <button class="btn btn-outline-secondary btn-sm" 
@@ -150,7 +150,6 @@
         Você ainda não possui certificados emitidos. 
         Os certificados são gerados automaticamente após a conclusão dos eventos.
         <br><br>
-        <a href="{% url 'eventos:evento_list' %}" class="alert-link">Ver eventos disponíveis</a>
     </div>
 {% endif %}
 
@@ -175,7 +174,6 @@
             Para validar um certificado, acesse a página de validação e informe o código de verificação.
             O sistema confirmará a autenticidade do documento.
         </p>
-        <a href="{% url 'eventos:certificado_validar_form' %}" class="btn btn-outline-info">
             <i class="fas fa-check-circle me-2"></i>Validar Certificado
         </a>
     </div>
