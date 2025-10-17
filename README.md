@@ -1,4 +1,4 @@
-# 📚 Sistema de Gestão de Eventos Acadêmicos (SGEA)# sgea-django
+# 📚 Sistema de Gestão de Eventos Acadêmicos (SGEA)
 
 Sistema de Gestão de Eventos Acadêmicos (SGEA) com Python e Django
 
@@ -6,6 +6,13 @@ Sistema de Gestão de Eventos Acadêmicos (SGEA) com Python e Django
 ![Django](https://img.shields.io/badge/Django-4.2+-green.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3-lightgrey.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+## 📖 Documentação do Projeto
+
+- **[Requisitos e Casos de Uso](docs/REQUISITOS_E_CASOS_DE_USO.md)** - Documentação completa dos requisitos funcionais e casos de uso
+- **[Diagrama Lógico do Banco de Dados](docs/diagrama_logico.md)** - Modelagem e estrutura do banco de dados
+
+---
 
 Sistema web completo para gerenciamento de eventos acadêmicos como seminários, palestras, minicursos e semanas acadêmicas. Desenvolvido com Django, SQLite e seguindo as melhores práticas de desenvolvimento web.
 
