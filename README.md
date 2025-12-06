@@ -40,53 +40,75 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 
 ###  Autenticação e Cadastro
 
--  Cadastro de novos usuários com validação de dados
+-  Cadastro com validação avançada (senha forte obrigatória)
+-  Confirmação de email com token
 -  Login e logout seguros
 -  Perfis diferenciados (Aluno, Professor, Organizador)
--  Gerenciamento de sessões
+-  Máscara de telefone: (XX) XXXXX-XXXX
 
 ###  Gestão de Eventos
 
--  Criação de eventos com informações completas
--  Edição de eventos existentes
--  Tipos de eventos: Seminário, Palestra, Minicurso, Semana Acadêmica
+-  CRUD completo de eventos (apenas organizadores)
+-  Upload de banner com validação de imagem
+-  Tipos: Seminário, Palestra, Minicurso, Semana Acadêmica
+-  Professor responsável obrigatório
 -  Controle de vagas e disponibilidade
+-  Datas futuras obrigatórias
 -  Filtros e busca de eventos
 
 ###  Inscrições
 
--  Inscrição simplificada em eventos
+-  Inscrição em eventos com validação de vagas
+-  Bloqueio automático quando lotado
+-  Prevenção de inscrições duplicadas
+-  Organizadores não podem se inscrever
 -  Cancelamento de inscrições
--  Visualização de eventos inscritos
--  Validação de vagas disponíveis
--  Histórico de inscrições
+-  Histórico completo
 
 ###  Certificados
 
--  Emissão de certificados para participantes
--  Download de certificados em PDF
+-  Geração automática após término do evento
+-  Download em PDF com QR Code
 -  Código de verificação único
--  Gerenciamento de certificados emitidos
+-  Validação de certificados
+
+###  API REST
+
+-  Autenticação por Token
+-  Consulta de eventos (20 req/dia)
+-  Inscrição em eventos (50 req/dia)
+-  Throttling configurado
+
+###  Auditoria
+
+-  Registro de ações críticas
+-  Consulta por data ou usuário
+-  Interface para organizadores
+
+###  Notificações
+
+-  Email de boas-vindas automático
+-  Confirmação de inscrições
+-  Link de confirmação de cadastro
 
 ##  Tecnologias Utilizadas
 
 - **Python 3.8+** - Linguagem de programação
-- **Django 4.2+** - Framework web
+- **Django 4.2.7** - Framework web
+- **Django REST Framework 3.14.0** - API REST
 - **SQLite** - Banco de dados
 - **HTML5/CSS3** - Frontend modular e responsivo
-- **ReportLab/WeasyPrint** - Geração de PDFs
+- **ReportLab** - Geração de certificados em PDF
 
 ### Arquitetura CSS
 
-O projeto utiliza CSS modular organizado em arquivos separados:
+CSS modular com identidade visual padronizada:
 
-- **base.css** - Estilos globais, componentes reutilizáveis e variáveis CSS
-- **home.css** - Estilos específicos da página inicial
-- **dashboard.css** - Estilos para dashboards de usuários
-- **evento-inscritos.css** - Estilos para gerenciamento de inscritos
-- **certificado.css** - Estilos otimizados para geração de PDFs
-
- Veja mais detalhes em: `static/css/README.md`
+- **base.css** - Estilos globais e variáveis CSS (cores, fontes)
+- **home.css** - Página inicial
+- **dashboard.css** - Dashboards de usuários
+- **evento-inscritos.css** - Gerenciamento de inscritos
+- **certificado.css** - Layout para PDFs
 
 ##  Instalação
 
@@ -125,65 +147,103 @@ pip install -r requirements.txt
 4. **Configure o banco de dados**
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. **Crie um superusuário**
+5. **Popule o banco com dados iniciais**
 
 ```bash
-python manage.py createsuperuser
+python seed_data.py
 ```
 
-6. **Execute o servidor**
+Isso criará 3 usuários de teste:
+- **Organizador:** organizador@sgea.com / Admin@123
+- **Professor:** professor@sgea.com / Professor@123
+- **Aluno:** aluno@sgea.com / Aluno@123
+
+6. **(Opcional) Crie um superusuário para acessar /admin**
+
+```bash
+python criar_superuser.py
+```
+
+Credenciais: admin / admin123
+
+7. **Execute o servidor**
 
 ```bash
 python manage.py runserver
 ```
 
-7. **Acesse o sistema**
+8. **Acesse o sistema**
 
 - Sistema: http://localhost:8000
 - Admin: http://localhost:8000/admin
+- API: http://localhost:8000/api
 
 ##  Uso
 
+### Credenciais de Teste
+
+Após executar `python seed_data.py`:
+
+| Perfil | Login | Senha |
+|--------|-------|-------|
+| Organizador | organizador@sgea.com | Admin@123 |
+| Professor | professor@sgea.com | Professor@123 |
+| Aluno | aluno@sgea.com | Aluno@123 |
+| Admin (opcional) | admin | admin123 |
+
 ### Para Alunos/Professores
 
-1. Faça cadastro informando seu perfil e instituição
-2. Navegue pelos eventos disponíveis
-3. Inscreva-se nos eventos de interesse
-4. Acompanhe suas inscrições no dashboard
-5. Baixe certificados após conclusão dos eventos
+1. Faça cadastro ou use credenciais de teste
+2. Confirme email via link (tokens de teste já confirmados)
+3. Navegue e filtre eventos disponíveis
+4. Inscreva-se nos eventos (vagas limitadas)
+5. Acompanhe inscrições no dashboard
+6. Baixe certificados após término dos eventos
 
 ### Para Organizadores
 
-1. Acesse o painel de criação de eventos
-2. Preencha informações do evento (tipo, data, local, vagas)
-3. Gerencie inscrições e lista de participantes
-4. Emita certificados para os participantes
+1. Crie eventos com banner, datas e professor responsável
+2. Gerencie inscritos e visualize estatísticas
+3. Consulte logs de auditoria
+4. Certificados são gerados automaticamente
 
-### Para Administradores
+### API REST
 
-- Acesse /admin com credenciais de superusuário
-- Gerencie usuários, eventos, inscrições e certificados
-- Visualize estatísticas e relatórios do sistema
+1. Obtenha token: `POST /api/token/` com username e password
+2. Consulte eventos: `GET /api/eventos/` (20 req/dia)
+3. Inscreva-se: `POST /api/inscricoes/` (50 req/dia)
+4. Use header: `Authorization: Token seu_token`
 
 ##  Documentação
 
 ### Modelos de Dados
 
-- **Usuario**: Informações de usuários com perfis diferenciados
-- **Evento**: Dados completos de eventos acadêmicos
-- **Inscricao**: Relacionamento entre usuários e eventos
-- **Certificado**: Certificados digitais com código de verificação
+- **Usuario**: Usuários com perfis (Aluno, Professor, Organizador) e confirmação de email
+- **Evento**: Eventos com banner, professor responsável, vagas e datas
+- **Inscricao**: Inscrições com validação de duplicidade e vagas
+- **Certificado**: Certificados com código único de verificação
+- **Auditoria**: Registro de ações críticas do sistema
+
+### Regras de Negócio
+
+1. **Senha forte:** 8+ caracteres, letras, números e especiais
+2. **Datas futuras:** Eventos só podem ser criados com data futura
+3. **Professor obrigatório:** Todo evento deve ter professor responsável
+4. **Bloqueio de vagas:** Inscrições bloqueadas quando lotado
+5. **Sem duplicatas:** Usuário não pode se inscrever duas vezes
+6. **Organizadores:** Não podem se inscrever em eventos
 
 ### Segurança
 
 - Senhas com hash PBKDF2 SHA256
 - Proteção CSRF em formulários
-- Validação de dados de entrada
+- Validação avançada de entrada (telefone, email, imagens)
 - Controle de permissões por perfil
+- Token de confirmação de email
+- Throttling na API (20/50 req/dia)
 
 ##  Contribuindo
 
