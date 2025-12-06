@@ -82,12 +82,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 mb-2">
-                        <a href="{% url 'eventos:evento_create' %}" class="btn btn-primary w-100">
+                        <a href="{% url 'evento_create' %}" class="btn btn-primary w-100">
                             <i class="fas fa-plus-circle me-2"></i>Novo Evento
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="{% url 'eventos:evento_list' %}" class="btn btn-outline-primary w-100">
+                        <a href="{% url 'eventos_list' %}" class="btn btn-outline-primary w-100">
                             <i class="fas fa-list me-2"></i>Ver Todos Eventos
                         </a>
                     </div>
@@ -115,7 +115,7 @@
                 <h5 class="mb-0">
                     <i class="fas fa-calendar-alt me-2"></i>Meus Eventos
                 </h5>
-                <a href="{% url 'eventos:evento_create' %}" class="btn btn-sm btn-primary">
+                <a href="{% url 'evento_create' %}" class="btn btn-sm btn-primary">
                     <i class="fas fa-plus me-1"></i>Novo Evento
                 </a>
             </div>
@@ -161,22 +161,22 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <a href="{% url 'eventos:evento_detail' evento.pk %}" 
-                                                   class="btn btn-outline-primary"
-                                                   title="Ver Detalhes">
+                                                <a href="{% url 'evento_detail' evento.pk %}" 
+                                                   class="btn btn-sm btn-primary"
+                                                   title="Ver detalhes">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{% url 'eventos:evento_update' evento.pk %}" 
+                                                <a href="{% url 'evento_edit' evento.pk %}"
                                                    class="btn btn-outline-warning"
                                                    title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="{% url 'eventos:evento_inscritos' evento.pk %}" 
+                                                <a href="{% url 'evento_inscritos' evento.pk %}" 
                                                    class="btn btn-outline-info"
                                                    title="Ver Inscritos">
                                                     <i class="fas fa-users"></i>
                                                 </a>
-                                                <a href="{% url 'eventos:evento_delete' evento.pk %}" 
+                                                <a href="{% url 'evento_delete' evento.pk %}" 
                                                    class="btn btn-outline-danger"
                                                    title="Excluir"
                                                    onclick="return confirm('Tem certeza que deseja excluir este evento?')">
@@ -193,7 +193,7 @@
                     <div class="alert alert-info mb-0">
                         <i class="fas fa-info-circle me-2"></i>
                         Você ainda não criou nenhum evento.
-                        <a href="{% url 'eventos:evento_create' %}" class="alert-link">Criar primeiro evento</a>
+                        <a href="{% url 'evento_create' %}" class="alert-link">Criar primeiro evento</a>
                     </div>
                 {% endif %}
             </div>

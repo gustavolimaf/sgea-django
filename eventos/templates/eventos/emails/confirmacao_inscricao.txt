@@ -1,0 +1,26 @@
+SGEA - Inscrição Confirmada!
+
+Olá, {{ nome }}!
+
+Sua inscrição foi confirmada com sucesso!
+
+INFORMAÇÕES DO EVENTO:
+------------------------
+{{ evento.nome }}
+Tipo: {{ evento.get_tipo_display }}
+Data: {{ evento.data_inicial|date:"d/m/Y" }} a {{ evento.data_final|date:"d/m/Y" }}
+Horário: {{ evento.horario_inicio }} às {{ evento.horario_fim }}
+Local: {{ evento.local }}
+
+O QUE FAZER AGORA?
+- Anote a data e horário do evento
+- Prepare-se para participar
+- Após o evento, seu certificado será gerado automaticamente
+
+Você pode acompanhar suas inscrições e certificados através do seu painel no SGEA.
+
+Nos vemos no evento!
+
+---
+(c) 2024 SGEA - Sistema de Gestão de Eventos Acadêmicos
+Este é um email automático, por favor não responda.

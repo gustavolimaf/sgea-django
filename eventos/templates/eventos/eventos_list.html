@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-4 text-end">
         {% if user.is_staff %}
-            <a href="{% url 'eventos:evento_create' %}" class="btn btn-primary">
+            <a href="{% url 'evento_create' %}" class="btn btn-primary">
                 <i class="fas fa-plus-circle me-2"></i>Novo Evento
             </a>
         {% endif %}
@@ -104,11 +104,11 @@
                             </p>
 
                             <div class="d-grid gap-2">
-                                <a href="{% url 'eventos:evento_detail' evento.pk %}" class="btn btn-primary">
+                                <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-primary">
                                     <i class="fas fa-eye me-2"></i>Ver Detalhes
                                 </a>
                                 {% if user.is_staff %}
-                                    <a href="{% url 'eventos:evento_update' evento.pk %}" class="btn btn-sm btn-outline-warning">
+                                    <a href="{% url 'evento_edit' evento.pk %}" class="btn btn-sm btn-outline-warning">
                                         <i class="fas fa-edit me-1"></i>Editar
                                     </a>
                                 {% endif %}
@@ -155,7 +155,7 @@
         <i class="fas fa-info-circle me-2"></i>
         Nenhum evento encontrado.
         {% if user.is_staff %}
-            <a href="{% url 'eventos:evento_create' %}" class="alert-link">Criar primeiro evento</a>
+            <a href="{% url 'evento_create' %}" class="alert-link">Criar primeiro evento</a>
         {% endif %}
     </div>
 {% endif %}

@@ -16,7 +16,7 @@
                     Digite o código de verificação do certificado para validar sua autenticidade.
                 </p>
                 
-                <form method="get" action="{% url 'eventos:certificado_validar' '00000000-0000-0000-0000-000000000000' %}" id="validarForm">
+                <form method="get" action="{% url 'certificado_validar' '00000000-0000-0000-0000-000000000000' %}" id="validarForm">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="codigo" class="form-label">Código de Verificação</label>
@@ -48,7 +48,7 @@
 document.getElementById('validarForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var codigo = document.getElementById('codigo').value;
-    var url = "{% url 'eventos:certificado_validar' '00000000-0000-0000-0000-000000000000' %}";
+    var url = "{% url 'certificado_validar' '00000000-0000-0000-0000-000000000000' %}";
     url = url.replace('00000000-0000-0000-0000-000000000000', codigo);
     window.location.href = url;
 });

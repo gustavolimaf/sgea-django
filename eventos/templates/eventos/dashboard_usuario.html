@@ -27,13 +27,13 @@
         <h2 class="card-title">Ações Rápidas</h2>
         <div class="grid grid-3">
             <a href="{% url 'eventos_list' %}" class="btn btn-primary" style="padding: 1rem;">
-                📚 Ver Eventos Disponíveis
+                 Ver Eventos Disponíveis
             </a>
             <a href="{% url 'minhas_inscricoes' %}" class="btn btn-outline" style="padding: 1rem;">
-                📋 Minhas Inscrições
+                 Minhas Inscrições
             </a>
             <a href="{% url 'meus_certificados' %}" class="btn btn-outline" style="padding: 1rem;">
-                🎓 Meus Certificados
+                 Meus Certificados
             </a>
         </div>
     </div>
@@ -53,16 +53,16 @@
                     {{ inscricao.evento.descricao|truncatewords:15 }}
                 </p>
                 <div style="margin-bottom: 0.5rem;">
-                    <strong>📅 Data:</strong> {{ inscricao.evento.data_inicial|date:"d/m/Y" }}
+                    <strong> Data:</strong> {{ inscricao.evento.data_inicial|date:"d/m/Y" }}
                 </div>
                 <div style="margin-bottom: 0.5rem;">
-                    <strong>⏰ Horário:</strong> {{ inscricao.evento.horario_inicio|time:"H:i" }} - {{ inscricao.evento.horario_fim|time:"H:i" }}
+                    <strong>Horário:</strong> {{ inscricao.evento.horario_inicio|time:"H:i" }} - {{ inscricao.evento.horario_fim|time:"H:i" }}
                 </div>
                 <div style="margin-bottom: 0.5rem;">
-                    <strong>📍 Local:</strong> {{ inscricao.evento.local }}
+                    <strong> Local:</strong> {{ inscricao.evento.local }}
                 </div>
                 <div style="margin-bottom: 1rem;">
-                    <strong>✅ Inscrito em:</strong> {{ inscricao.data_inscricao|date:"d/m/Y H:i" }}
+                    <strong> Inscrito em:</strong> {{ inscricao.data_inscricao|date:"d/m/Y H:i" }}
                 </div>
                 <div class="grid grid-2" style="gap: 0.5rem;">
                     <a href="{% url 'evento_detail' inscricao.evento.pk %}" class="btn btn-primary">
@@ -83,7 +83,7 @@
     </div>
     {% else %}
     <div class="card text-center">
-        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">📚</div>
+        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></div>
         <h3 style="margin-bottom: 1rem;">Você não possui inscrições ativas</h3>
         <p style="color: var(--secondary-color); margin-bottom: 2rem;">
             Explore os eventos disponíveis e faça sua inscrição!

@@ -151,7 +151,7 @@
                     <hr>
 
                     <div class="d-flex justify-content-between">
-                        <a href="{% if form.instance.pk %}{% url 'eventos:evento_detail' form.instance.pk %}{% else %}{% url 'eventos:evento_list' %}{% endif %}" 
+                        <a href="{% if form.instance.pk %}{% url 'evento_detail' form.instance.pk %}{% else %}{% url 'eventos_list' %}{% endif %}" 
                            class="btn btn-outline-secondary">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </a>

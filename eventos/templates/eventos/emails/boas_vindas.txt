@@ -1,0 +1,20 @@
+SGEA - Sistema de Gestão de Eventos Acadêmicos
+
+Bem-vindo(a), {{ nome }}!
+
+É um prazer tê-lo(a) conosco no SGEA!
+
+Seu cadastro foi realizado com sucesso:
+- Nome de usuário: {{ username }}
+- Perfil: {{ perfil }}
+
+Para ativar sua conta, confirme seu email acessando o link abaixo:
+{{ link_confirmacao }}
+
+IMPORTANTE: Você só poderá acessar o sistema após confirmar seu email.
+
+Se você não se cadastrou no SGEA, por favor ignore este email.
+
+---
+(c) 2024 SGEA - Sistema de Gestão de Eventos Acadêmicos
+Este é um email automático, por favor não responda.

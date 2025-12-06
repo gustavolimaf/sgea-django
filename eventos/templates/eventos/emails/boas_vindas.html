@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            background-color: white;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> SGEA</h1>
+            <p>Sistema de Gestão de Eventos Acadêmicos</p>
+        </div>
+        
+        <div class="content">
+            <h2>Bem-vindo(a), {{ nome }}!</h2>
+            
+            <p>É um prazer tê-lo(a) conosco no SGEA!</p>
+            
+            <p>Seu cadastro foi realizado com sucesso com as seguintes informações:</p>
+            <ul>
+                <li><strong>Nome de usuário:</strong> {{ username }}</li>
+                <li><strong>Perfil:</strong> {{ perfil }}</li>
+            </ul>
+            
+            <p>Para ativar sua conta e começar a usar o sistema, por favor confirme seu email clicando no botão abaixo:</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ link_confirmacao }}" class="button">Confirmar Email</a>
+            </div>
+            
+            <p>Ou copie e cole este link no seu navegador:</p>
+            <p style="background-color: #f4f4f4; padding: 10px; word-break: break-all;">
+                {{ link_confirmacao }}
+            </p>
+            
+            <p><strong>Importante:</strong> Você só poderá acessar o sistema após confirmar seu email.</p>
+            
+            <p>Se você não se cadastrou no SGEA, por favor ignore este email.</p>
+        </div>
+        
+        <div class="footer">
+            <p>(c) 2024 SGEA - Sistema de Gestão de Eventos Acadêmicos</p>
+            <p>Este é um email automático, por favor não responda.</p>
+        </div>
+    </div>
+</body>
+</html>

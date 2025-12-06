@@ -73,12 +73,12 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <a href="{% url 'eventos:certificado_download' certificado.pk %}" 
+                            <a href="{% url 'certificado_download' certificado.pk %}" 
                             class="btn btn-success"
                             target="_blank">
                                 <i class="fas fa-download me-2"></i>Baixar PDF
                             </a>
-                            <a href="{% url 'eventos:certificado_validar' certificado.codigo_verificacao %}" 
+                            <a href="{% url 'certificado_validar' certificado.codigo_verificacao %}" 
                                 class="btn btn-outline-info btn-sm"
                                 target="_blank">
                                 <i class="fas fa-check me-2"></i>Validar Certificado

@@ -1,10 +1,13 @@
 """
 Models para o Sistema de Gestão de Eventos Acadêmicos (SGEA)
 """
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from django.utils import timezone
+from .validators import validate_phone_number, validate_image_file, validate_future_date
 
 
 class Usuario(AbstractUser):
@@ -19,14 +22,21 @@ class Usuario(AbstractUser):
     ]
     
     telefone = models.CharField(
-        max_length=15,
-        validators=[
-            RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message="Telefone deve estar no formato: '+999999999'. Até 15 dígitos."
-            )
-        ],
-        help_text="Telefone de contato"
+        max_length=20,
+        validators=[validate_phone_number],
+        help_text="Telefone de contato no formato (XX) XXXXX-XXXX"
+    )
+    
+    email_confirmado = models.BooleanField(
+        default=False,
+        help_text="Indica se o email foi confirmado"
+    )
+    
+    token_confirmacao = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Token para confirmação de email"
     )
     
     instituicao = models.CharField(
@@ -129,6 +139,24 @@ class Evento(models.Model):
         help_text="Organizador responsável pelo evento"
     )
     
+    professor_responsavel = models.ForeignKey(
+        'Usuario',
+        on_delete=models.PROTECT,
+        related_name='eventos_como_responsavel',
+        limit_choices_to={'perfil': 'PROFESSOR'},
+        null=True,
+        blank=True,
+        help_text="Professor responsável pelo evento acadêmico"
+    )
+    
+    banner = models.ImageField(
+        upload_to='banners/%Y/%m/',
+        validators=[validate_image_file],
+        null=True,
+        blank=True,
+        help_text="Banner do evento (JPG, PNG, GIF, WEBP - máx 5MB)"
+    )
+    
     data_criacao = models.DateTimeField(
         auto_now_add=True,
         help_text="Data de criação do registro"
@@ -162,7 +190,9 @@ class Evento(models.Model):
         """
         Validações customizadas do modelo
         """
-        from django.core.exceptions import ValidationError
+        # Validar data inicial futura
+        if self.data_inicial:
+            validate_future_date(self.data_inicial)
         
         if self.data_final and self.data_inicial:
             if self.data_final < self.data_inicial:
@@ -176,6 +206,12 @@ class Evento(models.Model):
                     raise ValidationError({
                         'horario_fim': 'O horário de término deve ser posterior ao horário de início.'
                     })
+        
+        # Validar professor responsável
+        if self.professor_responsavel and self.professor_responsavel.perfil != 'PROFESSOR':
+            raise ValidationError({
+                'professor_responsavel': 'O responsável deve ser um professor.'
+            })
     
     @property
     def vagas_disponiveis(self):
@@ -197,26 +233,8 @@ class Evento(models.Model):
         """
         Verifica se o evento já ocorreu
         """
-        from datetime import datetime
         hoje = timezone.now().date()
         return self.data_final < hoje
-    
-    @property
-    def duracao_horas(self):
-        """
-        Calcula a duração do evento em horas
-        """
-        from datetime import datetime, timedelta
-        
-        # Calcula dias do evento
-        dias = (self.data_final - self.data_inicial).days + 1
-        
-        # Calcula horas por dia
-        inicio = datetime.combine(self.data_inicial, self.horario_inicio)
-        fim = datetime.combine(self.data_inicial, self.horario_fim)
-        horas_por_dia = (fim - inicio).total_seconds() / 3600
-        
-        return int(dias * horas_por_dia)
 
 
 class Inscricao(models.Model):
@@ -271,8 +289,6 @@ class Inscricao(models.Model):
         """
         Validações customizadas
         """
-        from django.core.exceptions import ValidationError
-        
         # Verifica se o evento já ocorreu
         if self.evento.ja_ocorreu:
             raise ValidationError(
@@ -284,6 +300,25 @@ class Inscricao(models.Model):
             raise ValidationError(
                 'Este evento não possui mais vagas disponíveis.'
             )
+        
+        # Verifica se usuário é organizador (organizadores não podem se inscrever)
+        if self.usuario.perfil == 'ORGANIZADOR':
+            raise ValidationError(
+                'Organizadores não podem se inscrever em eventos.'
+            )
+        
+        # Verifica duplicidade de inscrição
+        if not self.pk:
+            inscricao_existente = Inscricao.objects.filter(
+                usuario=self.usuario,
+                evento=self.evento,
+                ativa=True
+            ).exists()
+            
+            if inscricao_existente:
+                raise ValidationError(
+                    'Você já está inscrito neste evento.'
+                )
     
     def cancelar(self):
         """
@@ -354,8 +389,6 @@ class Certificado(models.Model):
         """
         Validações customizadas
         """
-        from django.core.exceptions import ValidationError
-        
         # Verifica se a inscrição está ativa
         if not self.inscricao.ativa:
             raise ValidationError(
@@ -367,3 +400,83 @@ class Certificado(models.Model):
             raise ValidationError(
                 'Apenas o organizador do evento pode emitir certificados.'
             )
+
+
+class Auditoria(models.Model):
+    """
+    Model para registro de auditoria (logs) das ações do sistema.
+    """
+    ACAO_CHOICES = [
+        ('CRIAR_USUARIO', 'Criação de usuário'),
+        ('CRIAR_EVENTO', 'Cadastro de evento'),
+        ('EDITAR_EVENTO', 'Alteração de evento'),
+        ('EXCLUIR_EVENTO', 'Exclusão de evento'),
+        ('INSCRICAO', 'Inscrição em evento'),
+        ('CANCELAR_INSCRICAO', 'Cancelamento de inscrição'),
+        ('EMITIR_CERTIFICADO', 'Emissão de certificado'),
+        ('CONSULTAR_CERTIFICADO', 'Consulta de certificado'),
+        ('API_CONSULTA', 'Consulta via API'),
+        ('API_INSCRICAO', 'Inscrição via API'),
+    ]
+    
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='acoes_auditoria',
+        help_text="Usuário que realizou a ação"
+    )
+    
+    acao = models.CharField(
+        max_length=30,
+        choices=ACAO_CHOICES,
+        help_text="Tipo de ação realizada"
+    )
+    
+    descricao = models.TextField(
+        help_text="Descrição detalhada da ação"
+    )
+    
+    ip_address = models.GenericIPAddressField(
+        null=True,
+        blank=True,
+        help_text="Endereço IP de origem"
+    )
+    
+    data_hora = models.DateTimeField(
+        auto_now_add=True,
+        help_text="Data e hora da ação"
+    )
+    
+    dados_adicionais = models.JSONField(
+        null=True,
+        blank=True,
+        help_text="Dados adicionais sobre a ação (JSON)"
+    )
+    
+    class Meta:
+        verbose_name = "Auditoria"
+        verbose_name_plural = "Auditorias"
+        ordering = ['-data_hora']
+        indexes = [
+            models.Index(fields=['usuario', 'data_hora']),
+            models.Index(fields=['acao', 'data_hora']),
+            models.Index(fields=['data_hora']),
+        ]
+    
+    def __str__(self):
+        usuario_str = self.usuario.username if self.usuario else "Sistema"
+        return f"{usuario_str} - {self.get_acao_display()} em {self.data_hora.strftime('%d/%m/%Y %H:%M')}"
+    
+    @staticmethod
+    def registrar(usuario, acao, descricao, ip_address=None, dados_adicionais=None):
+        """
+        Método auxiliar para registrar uma ação de auditoria
+        """
+        return Auditoria.objects.create(
+            usuario=usuario,
+            acao=acao,
+            descricao=descricao,
+            ip_address=ip_address,
+            dados_adicionais=dados_adicionais
+        )

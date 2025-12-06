@@ -1,0 +1,49 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Excluir Evento - SGEA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h1 style="color: var(--danger-color);">Confirmar Exclusão</h1>
+        
+        <div class="alert alert-warning">
+            <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+        </div>
+        
+        <p>Tem certeza que deseja excluir o evento:</p>
+        
+        <div style="background-color: var(--light-bg); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+            <h2 style="margin-bottom: 0.5rem;">{{ evento.nome }}</h2>
+            <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">
+                <strong>Tipo:</strong> {{ evento.get_tipo_display }}
+            </p>
+            <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">
+                <strong>Data:</strong> {{ evento.data_inicial|date:"d/m/Y" }} a {{ evento.data_final|date:"d/m/Y" }}
+            </p>
+            <p style="color: var(--secondary-color); margin-bottom: 0;">
+                <strong>Local:</strong> {{ evento.local }}
+            </p>
+        </div>
+        
+        {% if inscricoes_ativas > 0 %}
+        <div class="alert alert-danger">
+            <strong>Atenção!</strong> Este evento possui <strong>{{ inscricoes_ativas }}</strong> inscrição(ões) ativa(s).
+            Ao excluir o evento, todas as inscrições também serão removidas.
+        </div>
+        {% endif %}
+        
+        <form method="post" style="margin-top: 2rem;">
+            {% csrf_token %}
+            <div style="display: flex; gap: 1rem; justify-content: flex-start;">
+                <button type="submit" class="btn btn-danger">
+                    Sim, excluir evento
+                </button>
+                <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-outline">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

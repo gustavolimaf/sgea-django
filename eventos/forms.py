@@ -4,7 +4,8 @@ Forms para o Sistema de Gestão de Eventos Acadêmicos (SGEA)
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from .models import Usuario, Evento, Inscricao, Certificado
+from .models import Usuario, Evento
+from .validators import validate_strong_password
 
 
 class UsuarioRegistroForm(UserCreationForm):
@@ -40,12 +41,14 @@ class UsuarioRegistroForm(UserCreationForm):
     )
     
     telefone = forms.CharField(
-        max_length=15,
+        max_length=20,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': '+5511999999999'
-        })
+            'placeholder': '(11) 99999-9999',
+            'data-mask': '(00) 00000-0000'
+        }),
+        help_text='Formato: (XX) XXXXX-XXXX'
     )
     
     instituicao = forms.CharField(
@@ -84,10 +87,17 @@ class UsuarioRegistroForm(UserCreationForm):
             'class': 'form-control',
             'placeholder': 'Digite sua senha'
         })
+        self.fields['password1'].help_text = 'Mínimo 8 caracteres, letras, números e caracteres especiais'
         self.fields['password2'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Confirme sua senha'
         })
+    
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if password:
+            validate_strong_password(password)
+        return password
     
     def clean(self):
         cleaned_data = super().clean()
@@ -131,7 +141,7 @@ class EventoForm(forms.ModelForm):
     data_inicial = forms.DateField(
         label='Data Inicial',
         widget=forms.DateInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control datepicker',
             'type': 'date'
         })
     )
@@ -139,7 +149,7 @@ class EventoForm(forms.ModelForm):
     data_final = forms.DateField(
         label='Data Final',
         widget=forms.DateInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control datepicker',
             'type': 'date'
         })
     )
@@ -147,7 +157,7 @@ class EventoForm(forms.ModelForm):
     horario_inicio = forms.TimeField(
         label='Horário de Início',
         widget=forms.TimeInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control timepicker',
             'type': 'time'
         })
     )
@@ -155,9 +165,28 @@ class EventoForm(forms.ModelForm):
     horario_fim = forms.TimeField(
         label='Horário de Término',
         widget=forms.TimeInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control timepicker',
             'type': 'time'
         })
+    )
+    
+    professor_responsavel = forms.ModelChoiceField(
+        queryset=Usuario.objects.filter(perfil='PROFESSOR'),
+        label='Professor Responsável',
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        }),
+        help_text='Selecione o professor responsável pelo evento'
+    )
+    
+    banner = forms.ImageField(
+        label='Banner do Evento',
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*'
+        }),
+        help_text='Imagem do evento (JPG, PNG, GIF, WEBP - máx 5MB)'
     )
     
     class Meta:
@@ -166,7 +195,8 @@ class EventoForm(forms.ModelForm):
             'tipo', 'nome', 'descricao', 
             'data_inicial', 'data_final', 
             'horario_inicio', 'horario_fim',
-            'local', 'vagas_totais', 'ativo'
+            'local', 'vagas_totais', 'professor_responsavel',
+            'banner', 'ativo'
         ]
         widgets = {
             'tipo': forms.Select(attrs={
@@ -183,7 +213,7 @@ class EventoForm(forms.ModelForm):
             }),
             'local': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Ex: Auditório Principal - Bloco A'
+                'placeholder': 'Ex: Auditório Principal - Bloco 1'
             }),
             'vagas_totais': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -194,13 +224,3 @@ class EventoForm(forms.ModelForm):
                 'class': 'form-check-input'
             })
         }
-
-
-class InscricaoForm(forms.ModelForm):
-    """
-    Formulário para inscrição em eventos
-    """
-    class Meta:
-        model = Inscricao
-        fields = []  # Usuario e evento são preenchidos automaticamente
-

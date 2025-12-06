@@ -6,14 +6,11 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q, Count
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from .models import Usuario, Evento, Inscricao, Certificado
-from .forms import (
-    UsuarioRegistroForm, EventoForm, 
-    LoginForm, InscricaoForm
-)
+from .forms import UsuarioRegistroForm, EventoForm, LoginForm
 
 
 # ============================================
@@ -201,13 +198,16 @@ def evento_detail(request, pk):
     
     inscrito = False
     tem_certificado = False
+    inscricao = None
     
     if request.user.is_authenticated:
-        inscrito = Inscricao.objects.filter(
+        inscricao = Inscricao.objects.filter(
             usuario=request.user,
             evento=evento,
             ativa=True
-        ).exists()
+        ).first()
+        
+        inscrito = inscricao is not None
         
         if inscrito:
             tem_certificado = Certificado.objects.filter(
@@ -218,6 +218,7 @@ def evento_detail(request, pk):
     context = {
         'evento': evento,
         'inscrito': inscrito,
+        'inscricao': inscricao,
         'tem_certificado': tem_certificado,
     }
     return render(request, 'eventos/evento_detail.html', context)
@@ -236,7 +237,7 @@ def evento_create(request):
         return redirect('eventos_list')
     
     if request.method == 'POST':
-        form = EventoForm(request.POST)
+        form = EventoForm(request.POST, request.FILES)
         if form.is_valid():
             evento = form.save(commit=False)
             evento.organizador = request.user
@@ -278,7 +279,7 @@ def evento_edit(request, pk):
         return redirect('evento_detail', pk=pk)
     
     if request.method == 'POST':
-        form = EventoForm(request.POST, instance=evento)
+        form = EventoForm(request.POST, request.FILES, instance=evento)
         if form.is_valid():
             try:
                 evento = form.save(commit=False)
@@ -299,6 +300,38 @@ def evento_edit(request, pk):
     return render(request, 'eventos/evento_form.html', {
         'form': form,
         'evento': evento,
+    })
+
+
+@login_required
+def evento_delete(request, pk):
+    """
+    Exclusão de evento (apenas organizador responsável)
+    """
+    evento = get_object_or_404(Evento, pk=pk)
+    
+    if evento.organizador != request.user:
+        messages.error(
+            request, 
+            'Você não tem permissão para excluir este evento.'
+        )
+        return redirect('evento_detail', pk=pk)
+    
+    # Verifica se há inscrições ativas
+    inscricoes_ativas = Inscricao.objects.filter(evento=evento, ativa=True).count()
+    
+    if request.method == 'POST':
+        nome_evento = evento.nome
+        evento.delete()
+        messages.success(
+            request, 
+            f'Evento "{nome_evento}" excluído com sucesso!'
+        )
+        return redirect('dashboard')
+    
+    return render(request, 'eventos/evento_confirm_delete.html', {
+        'evento': evento,
+        'inscricoes_ativas': inscricoes_ativas,
     })
 
 
@@ -453,16 +486,28 @@ def evento_inscritos(request, pk):
     })
 
 
-@login_required
-def certificado_validar_form(request):
-    """Formulário para validação de certificados"""
-    return render(request, 'eventos/certificado_validar.html')
-
-@login_required
 def certificado_validar(request, codigo):
     """Validação de certificado por código"""
+    from .models import Auditoria
+    
+    # Se não há código, mostra o formulário
+    if not codigo:
+        return render(request, 'eventos/certificado_validar.html')
+    
     try:
         certificado = Certificado.objects.get(codigo_verificacao=codigo)
+        
+        # Registra auditoria
+        Auditoria.registrar(
+            usuario=request.user if request.user.is_authenticated else None,
+            acao='CONSULTAR_CERTIFICADO',
+            descricao=f'Consulta de certificado: {codigo}',
+            dados_adicionais={
+                'codigo': codigo,
+                'valido': True
+            }
+        )
+        
         return render(request, 'eventos/certificado_validacao.html', {
             'certificado': certificado,
             'valido': True
@@ -472,6 +517,75 @@ def certificado_validar(request, codigo):
             'valido': False,
             'codigo': codigo
         })
+
+
+def confirmar_email(request, token):
+    """
+    Confirma o email do usuário através do token
+    """
+    try:
+        usuario = Usuario.objects.get(token_confirmacao=token)
+        
+        if not usuario.email_confirmado:
+            usuario.email_confirmado = True
+            usuario.token_confirmacao = None
+            usuario.save(update_fields=['email_confirmado', 'token_confirmacao'])
+            
+            messages.success(
+                request,
+                'Email confirmado com sucesso! Você já pode fazer login no sistema.'
+            )
+        else:
+            messages.info(request, 'Este email já foi confirmado anteriormente.')
+        
+        return redirect('login')
+        
+    except Usuario.DoesNotExist:
+        messages.error(request, 'Token de confirmação inválido.')
+        return redirect('home')
+
+
+@login_required
+def auditoria_list(request):
+    """
+    Lista de registros de auditoria (apenas para organizadores)
+    """
+    if request.user.perfil != 'ORGANIZADOR':
+        messages.error(request, 'Acesso negado. Apenas organizadores podem acessar esta área.')
+        return redirect('dashboard')
+    
+    from .models import Auditoria
+    from django.core.paginator import Paginator
+    
+    # Filtros
+    auditorias = Auditoria.objects.all()
+    
+    # Filtro por data
+    data_filtro = request.GET.get('data')
+    if data_filtro:
+        auditorias = auditorias.filter(data_hora__date=data_filtro)
+    
+    # Filtro por usuário
+    usuario_filtro = request.GET.get('usuario')
+    if usuario_filtro:
+        auditorias = auditorias.filter(usuario__username__icontains=usuario_filtro)
+    
+    # Filtro por ação
+    acao_filtro = request.GET.get('acao')
+    if acao_filtro:
+        auditorias = auditorias.filter(acao=acao_filtro)
+    
+    # Paginação
+    paginator = Paginator(auditorias, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'acoes': Auditoria.ACAO_CHOICES,
+    }
+    
+    return render(request, 'eventos/auditoria_list.html', context)
 
 @login_required
 def meus_certificados(request):

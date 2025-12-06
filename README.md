@@ -1,4 +1,4 @@
-# 📚 Sistema de Gestão de Eventos Acadêmicos (SGEA)
+#  Sistema de Gestão de Eventos Acadêmicos (SGEA)
 
 Sistema de Gestão de Eventos Acadêmicos (SGEA) com Python e Django
 
@@ -7,7 +7,7 @@ Sistema de Gestão de Eventos Acadêmicos (SGEA) com Python e Django
 ![SQLite](https://img.shields.io/badge/SQLite-3-lightgrey.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 📖 Documentação do Projeto
+##  Documentação do Projeto
 
 - **[Requisitos e Casos de Uso](docs/REQUISITOS_E_CASOS_DE_USO.md)** - Documentação completa dos requisitos funcionais e casos de uso
 - **[Diagrama Lógico do Banco de Dados](docs/diagrama_logico.md)** - Modelagem e estrutura do banco de dados
@@ -16,7 +16,7 @@ Sistema de Gestão de Eventos Acadêmicos (SGEA) com Python e Django
 
 Sistema web completo para gerenciamento de eventos acadêmicos como seminários, palestras, minicursos e semanas acadêmicas. Desenvolvido com Django, SQLite e seguindo as melhores práticas de desenvolvimento web.
 
-## 📋 Índice
+##  Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
@@ -26,7 +26,7 @@ Sistema web completo para gerenciamento de eventos acadêmicos como seminários,
 - [Uso](#uso)
 - [Documentação](#documentação)
 
-## 🎯 Sobre o Projeto
+##  Sobre o Projeto
 
 O SGEA é uma plataforma web que facilita a organização, divulgação e gestão de eventos acadêmicos. O sistema permite que organizadores criem e gerenciem eventos, enquanto alunos e professores podem se inscrever facilmente e receber certificados digitais.
 
@@ -36,39 +36,39 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 - **Professores**: Podem se inscrever em eventos e baixar certificados
 - **Organizadores**: Podem criar eventos, gerenciar inscrições e emitir certificados
 
-## ✨ Funcionalidades
+##  Funcionalidades
 
-### 🔐 Autenticação e Cadastro
+###  Autenticação e Cadastro
 
-- ✅ Cadastro de novos usuários com validação de dados
-- ✅ Login e logout seguros
-- ✅ Perfis diferenciados (Aluno, Professor, Organizador)
-- ✅ Gerenciamento de sessões
+-  Cadastro de novos usuários com validação de dados
+-  Login e logout seguros
+-  Perfis diferenciados (Aluno, Professor, Organizador)
+-  Gerenciamento de sessões
 
-### 📅 Gestão de Eventos
+###  Gestão de Eventos
 
-- ✅ Criação de eventos com informações completas
-- ✅ Edição de eventos existentes
-- ✅ Tipos de eventos: Seminário, Palestra, Minicurso, Semana Acadêmica
-- ✅ Controle de vagas e disponibilidade
-- ✅ Filtros e busca de eventos
+-  Criação de eventos com informações completas
+-  Edição de eventos existentes
+-  Tipos de eventos: Seminário, Palestra, Minicurso, Semana Acadêmica
+-  Controle de vagas e disponibilidade
+-  Filtros e busca de eventos
 
-### 📝 Inscrições
+###  Inscrições
 
-- ✅ Inscrição simplificada em eventos
-- ✅ Cancelamento de inscrições
-- ✅ Visualização de eventos inscritos
-- ✅ Validação de vagas disponíveis
-- ✅ Histórico de inscrições
+-  Inscrição simplificada em eventos
+-  Cancelamento de inscrições
+-  Visualização de eventos inscritos
+-  Validação de vagas disponíveis
+-  Histórico de inscrições
 
-### 🎓 Certificados
+###  Certificados
 
-- ✅ Emissão de certificados para participantes
-- ✅ Download de certificados em PDF
-- ✅ Código de verificação único
-- ✅ Gerenciamento de certificados emitidos
+-  Emissão de certificados para participantes
+-  Download de certificados em PDF
+-  Código de verificação único
+-  Gerenciamento de certificados emitidos
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **Python 3.8+** - Linguagem de programação
 - **Django 4.2+** - Framework web
@@ -86,9 +86,9 @@ O projeto utiliza CSS modular organizado em arquivos separados:
 - **evento-inscritos.css** - Estilos para gerenciamento de inscritos
 - **certificado.css** - Estilos otimizados para geração de PDFs
 
-📁 Veja mais detalhes em: `static/css/README.md`
+ Veja mais detalhes em: `static/css/README.md`
 
-## 🚀 Instalação
+##  Instalação
 
 ### Pré-requisitos
 
@@ -146,7 +146,7 @@ python manage.py runserver
 - Sistema: http://localhost:8000
 - Admin: http://localhost:8000/admin
 
-## 📖 Uso
+##  Uso
 
 ### Para Alunos/Professores
 
@@ -169,7 +169,7 @@ python manage.py runserver
 - Gerencie usuários, eventos, inscrições e certificados
 - Visualize estatísticas e relatórios do sistema
 
-## 📚 Documentação
+##  Documentação
 
 ### Modelos de Dados
 
@@ -185,15 +185,15 @@ python manage.py runserver
 - Validação de dados de entrada
 - Controle de permissões por perfil
 
-## 🤝 Contribuindo
+##  Contribuindo
 
 Contribuições são bem-vindas! Siga o padrão PEP 8 e inclua testes para novas funcionalidades.
 
-## 📝 Licença
+##  Licença
 
 Este projeto está sob a licença MIT.
 
-## 👥 Autores
+##  Autores
 
 **Gustavo Lima** - [@gustavolimaf](https://github.com/gustavolimaf)
 

@@ -110,10 +110,10 @@
                             <i class="fas fa-check-circle me-2"></i>
                             Você já está inscrito neste evento!
                         </div>
-                        <a href="{% url 'eventos:minhas_inscricoes' %}" class="btn btn-outline-primary w-100 mb-2">
+                        <a href="{% url 'minhas_inscricoes' %}" class="btn btn-outline-primary w-100 mb-2">
                             <i class="fas fa-list me-2"></i>Minhas Inscrições
                         </a>
-                        <a href="{% url 'eventos:inscricao_cancelar' evento.pk %}" 
+                        <a href="{% url 'inscricao_cancelar' inscricao.pk %}" 
                            class="btn btn-outline-danger w-100"
                            onclick="return confirm('Tem certeza que deseja cancelar sua inscrição?')">
                             <i class="fas fa-times me-2"></i>Cancelar Inscrição
@@ -122,7 +122,7 @@
                         <p class="text-muted">
                             <strong>{{ evento.vagas_disponiveis }}</strong> vagas disponíveis
                         </p>
-                        <form method="post" action="{% url 'eventos:evento_inscrever' evento.pk %}">
+                        <form method="post" action="{% url 'inscricao_create' evento.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-success w-100">
                                 <i class="fas fa-check me-2"></i>Inscrever-se
@@ -141,10 +141,10 @@
                     {% endif %}
                 {% else %}
                     <p class="text-muted">Faça login para se inscrever</p>
-                    <a href="{% url 'eventos:login' %}?next={{ request.path }}" class="btn btn-primary w-100 mb-2">
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary w-100 mb-2">
                         <i class="fas fa-sign-in-alt me-2"></i>Fazer Login
                     </a>
-                    <a href="{% url 'eventos:registro' %}" class="btn btn-outline-primary w-100">
+                    <a href="{% url 'registro' %}" class="btn btn-outline-primary w-100">
                         <i class="fas fa-user-plus me-2"></i>Cadastrar
                     </a>
                 {% endif %}
@@ -185,13 +185,13 @@
                         <i class="fas fa-tools me-2"></i>Ações do Organizador
                     </h5>
                     <div class="d-grid gap-2">
-                        <a href="{% url 'eventos:evento_update' evento.pk %}" class="btn btn-warning">
+                        <a href="{% url 'evento_edit' evento.pk %}" class="btn btn-warning">
                             <i class="fas fa-edit me-2"></i>Editar Evento
                         </a>
-                        <a href="{% url 'eventos:evento_inscritos' evento.pk %}" class="btn btn-info">
+                        <a href="{% url 'evento_inscritos' evento.pk %}" class="btn btn-info">
                             <i class="fas fa-users me-2"></i>Ver Inscritos ({{ evento.inscricoes.count }})
                         </a>
-                        <a href="{% url 'eventos:evento_delete' evento.pk %}" 
+                        <a href="{% url 'evento_delete' evento.pk %}" 
                            class="btn btn-danger"
                            onclick="return confirm('Tem certeza que deseja excluir este evento?')">
                             <i class="fas fa-trash me-2"></i>Excluir Evento
@@ -206,7 +206,7 @@
 <!-- Botão Voltar -->
 <div class="row mt-4">
     <div class="col-12">
-        <a href="{% url 'eventos:evento_list' %}" class="btn btn-outline-secondary">
+        <a href="{% url 'eventos_list' %}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-2"></i>Voltar para Lista de Eventos
         </a>
     </div>

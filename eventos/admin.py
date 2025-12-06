@@ -4,7 +4,7 @@ Configuração do Django Admin para o SGEA
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
-from .models import Usuario, Evento, Inscricao, Certificado
+from .models import Usuario, Evento, Inscricao, Certificado, Auditoria
 
 
 @admin.register(Usuario)
@@ -193,6 +193,48 @@ class CertificadoAdmin(admin.ModelAdmin):
     def emitido_por_nome(self, obj):
         return obj.emitido_por.get_full_name()
     emitido_por_nome.short_description = "Emitido Por"
+
+
+@admin.register(Auditoria)
+class AuditoriaAdmin(admin.ModelAdmin):
+    """Admin para o modelo Auditoria"""
+    list_display = [
+        "data_hora", "usuario", "acao", "descricao_resumida", "ip_address"
+    ]
+    list_filter = ["acao", "data_hora"]
+    search_fields = ["descricao", "usuario__username", "ip_address"]
+    date_hierarchy = "data_hora"
+    ordering = ["-data_hora"]
+    readonly_fields = ["usuario", "acao", "descricao", "ip_address", "data_hora", "dados_adicionais"]
+    
+    fieldsets = (
+        ("Informações Básicas", {
+            "fields": ("usuario", "acao", "data_hora")
+        }),
+        ("Detalhes", {
+            "fields": ("descricao", "ip_address")
+        }),
+        ("Dados Adicionais", {
+            "fields": ("dados_adicionais",),
+            "classes": ("collapse",)
+        }),
+    )
+    
+    def descricao_resumida(self, obj):
+        """Exibe uma versão resumida da descrição"""
+        if len(obj.descricao) > 50:
+            return obj.descricao[:50] + "..."
+        return obj.descricao
+    
+    descricao_resumida.short_description = "Descrição"
+    
+    def has_add_permission(self, request):
+        """Não permite adicionar registros manualmente"""
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        """Não permite deletar registros de auditoria"""
+        return False
 
 
 # Personalização do Admin Site

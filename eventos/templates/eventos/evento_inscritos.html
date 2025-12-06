@@ -24,7 +24,7 @@
 
     }    <div class="col-md-4 text-end">
 
-        <a href="{% url 'eventos:evento_detail' evento.pk %}" class="btn btn-outline-secondary">
+        <a href="{% url 'evento_detail' evento.pk %}" class="btn btn-outline-secondary">
 
     .evento-info-header h1 {            <i class="fas fa-arrow-left me-2"></i>Voltar
 
@@ -258,9 +258,9 @@
 
         <h1>{{ evento.nome }}</h1>                                            <i class="fas fa-times me-1"></i>Não emitido
 
-        <p style="margin-bottom: 0.5rem;">📅 {{ evento.data_inicial|date:"d/m/Y" }} - {{ evento.data_final|date:"d/m/Y" }}</p>                                        </span>
+        <p style="margin-bottom: 0.5rem;"> {{ evento.data_inicial|date:"d/m/Y" }} - {{ evento.data_final|date:"d/m/Y" }}</p>                                        </span>
 
-        <p style="margin-bottom: 0;">📍 {{ evento.local }}</p>                                    {% endif %}
+        <p style="margin-bottom: 0;"> {{ evento.local }}</p>                                    {% endif %}
 
     </div>                                </td>
 
@@ -370,7 +370,7 @@
 
                         {% if inscricao.certificado %}        {% else %}
 
-                            <span class="badge-certificado badge-success">✓ Emitido</span>            <div class="alert alert-info mb-0">
+                            <span class="badge-certificado badge-success"> Emitido</span>            <div class="alert alert-info mb-0">
 
                         {% else %}                <i class="fas fa-info-circle me-2"></i>
 

@@ -21,9 +21,8 @@ urlpatterns = [
     path('eventos/<int:pk>/', views.evento_detail, name='evento_detail'),
     path('eventos/novo/', views.evento_create, name='evento_create'),
     path('eventos/<int:pk>/editar/', views.evento_edit, name='evento_edit'),
+    path('eventos/<int:pk>/excluir/', views.evento_delete, name='evento_delete'),
     path('eventos/<int:pk>/inscritos/', views.evento_inscritos, name='evento_inscritos'),
-    path('eventos/', views.eventos_list, name='evento_list'),
-    path('eventos/<int:pk>/', views.evento_detail, name='evento_detail'),
     
     
     # Inscrições
@@ -35,7 +34,12 @@ urlpatterns = [
     path('certificados/', views.meus_certificados, name='meus_certificados'),
     path('certificados/<int:pk>/download/', views.certificado_download, name='certificado_download'),
     path('certificados/emitir/<int:inscricao_pk>/', views.certificado_emitir, name='certificado_emitir'),
-    path('certificados/validar/', views.certificado_validar_form, name='certificado_validar_form'),
+    path('certificados/validar/', views.certificado_validar, name='certificado_validar_form'),
     path('certificados/validar/<str:codigo>/', views.certificado_validar, name='certificado_validar'),
-
+    
+    # Confirmação de email
+    path('confirmar-email/<str:token>/', views.confirmar_email, name='confirmar_email'),
+    
+    # Auditoria
+    path('auditoria/', views.auditoria_list, name='auditoria_list'),
 ]
