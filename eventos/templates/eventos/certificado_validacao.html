@@ -24,9 +24,8 @@
                         <div class="card-body text-start">
                             <h5>Informações do Certificado</h5>
                             <p><strong>Participante:</strong> {{ certificado.participante.get_full_name }}</p>
-                            <p><strong>Evento:</strong> {{ certificado.evento.titulo }}</p>
-                            <p><strong>Data do Evento:</strong> {{ certificado.evento.data_inicio|date:"d/m/Y" }}</p>
-                            <p><strong>Carga Horária:</strong> {{ certificado.evento.carga_horaria }} horas</p>
+                            <p><strong>Evento:</strong> {{ certificado.evento.nome }}</p>
+                            <p><strong>Data do Evento:</strong> {{ certificado.evento.data_inicial|date:"d/m/Y" }}</p>
                             <p><strong>Data de Emissão:</strong> {{ certificado.data_emissao|date:"d/m/Y" }}</p>
                             <p><strong>Código:</strong> <code>{{ certificado.codigo_verificacao }}</code></p>
                         </div>

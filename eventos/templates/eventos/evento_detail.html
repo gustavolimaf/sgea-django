@@ -1,13 +1,13 @@
 {% extends 'eventos/base.html' %}
 
-{% block title %}{{ evento.titulo }} - SGEA{% endblock %}
+{% block title %}{{ evento.nome }} - SGEA{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-8">
         <!-- Imagem do Evento -->
-        {% if evento.imagem %}
-            <img src="{{ evento.imagem.url }}" class="img-fluid rounded mb-4" alt="{{ evento.titulo }}">
+        {% if evento.banner %}
+            <img src="{{ evento.banner.url }}" class="img-fluid rounded mb-4" alt="{{ evento.nome }}">
         {% else %}
             <div class="bg-primary rounded d-flex align-items-center justify-content-center mb-4" style="height: 400px;">
                 <i class="fas fa-calendar-alt fa-10x text-white opacity-25"></i>
@@ -17,11 +17,11 @@
         <!-- Informações do Evento -->
         <div class="card mb-4">
             <div class="card-body">
-                <h1 class="card-title mb-3">{{ evento.titulo }}</h1>
+                <h1 class="card-title mb-3">{{ evento.nome }}</h1>
                 
                 <div class="mb-3">
-                    <span class="badge bg-info me-2">{{ evento.categoria }}</span>
-                    {% if evento.is_ativo %}
+                    <span class="badge bg-info me-2">{{ evento.get_tipo_display }}</span>
+                    {% if evento.ativo %}
                         <span class="badge bg-success">Inscrições Abertas</span>
                     {% else %}
                         <span class="badge bg-danger">Encerrado</span>
@@ -39,10 +39,10 @@
                     <div class="col-md-6 mb-3">
                         <h6><i class="fas fa-calendar me-2 text-primary"></i>Data e Hora</h6>
                         <p class="mb-1">
-                            <strong>Início:</strong> {{ evento.data_inicio|date:"d/m/Y - H:i" }}
+                            <strong>Início:</strong> {{ evento.data_inicial|date:"d/m/Y" }} - {{ evento.horario_inicio|time:"H:i" }}
                         </p>
                         <p>
-                            <strong>Término:</strong> {{ evento.data_fim|date:"d/m/Y - H:i" }}
+                            <strong>Término:</strong> {{ evento.data_final|date:"d/m/Y" }} - {{ evento.horario_fim|time:"H:i" }}
                         </p>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -55,22 +55,25 @@
                     <div class="col-md-6 mb-3">
                         <h6><i class="fas fa-users me-2 text-primary"></i>Vagas</h6>
                         <p>
-                            <strong>{{ evento.inscricoes.count }}</strong> de <strong>{{ evento.vagas }}</strong> vagas preenchidas
+                            {% with total_inscritos=evento.inscricoes.filter|default:0 %}
+                            <strong>{{ evento.inscricoes.count }}</strong> de <strong>{{ evento.vagas_totais }}</strong> vagas preenchidas
+                            {% endwith %}
                         </p>
+                        {% widthratio evento.inscricoes.count evento.vagas_totais 100 as percentual %}
                         <div class="progress" style="height: 25px;">
                             <div class="progress-bar" 
                                  role="progressbar" 
-                                 style="width: {{ evento.percentual_vagas }}%"
-                                 aria-valuenow="{{ evento.percentual_vagas }}" 
+                                 style="width: {{ percentual }}%"
+                                 aria-valuenow="{{ percentual }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
-                                {{ evento.percentual_vagas }}%
+                                {{ percentual }}%
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <h6><i class="fas fa-clock me-2 text-primary"></i>Carga Horária</h6>
-                        <p>{{ evento.carga_horaria }} horas</p>
+                        <h6><i class="fas fa-user-tie me-2 text-primary"></i>Organizador</h6>
+                        <p>{{ evento.organizador.get_full_name|default:evento.organizador.username }}</p>
                     </div>
                 </div>
 
@@ -118,7 +121,7 @@
                            onclick="return confirm('Tem certeza que deseja cancelar sua inscrição?')">
                             <i class="fas fa-times me-2"></i>Cancelar Inscrição
                         </a>
-                    {% elif evento.vagas_disponiveis > 0 and evento.is_ativo %}
+                    {% elif evento.vagas_disponiveis > 0 and evento.ativo %}
                         <p class="text-muted">
                             <strong>{{ evento.vagas_disponiveis }}</strong> vagas disponíveis
                         </p>
@@ -163,12 +166,12 @@
                        class="btn btn-outline-primary">
                         <i class="fab fa-facebook me-2"></i>Facebook
                     </a>
-                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ evento.titulo }}" 
+                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ evento.nome }}" 
                        target="_blank" 
                        class="btn btn-outline-info">
                         <i class="fab fa-twitter me-2"></i>Twitter
                     </a>
-                    <a href="https://wa.me/?text={{ evento.titulo }}%20{{ request.build_absolute_uri }}" 
+                    <a href="https://wa.me/?text={{ evento.nome }}%20{{ request.build_absolute_uri }}" 
                        target="_blank" 
                        class="btn btn-outline-success">
                         <i class="fab fa-whatsapp me-2"></i>WhatsApp

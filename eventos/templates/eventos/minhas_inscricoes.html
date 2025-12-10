@@ -67,10 +67,10 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-2 text-center">
-                        {% if inscricao.evento.imagem %}
-                            <img src="{{ inscricao.evento.imagem.url }}" 
+                        {% if inscricao.evento.banner %}
+                            <img src="{{ inscricao.evento.banner.url }}" 
                                  class="img-fluid rounded" 
-                                 alt="{{ inscricao.evento.titulo }}"
+                                 alt="{{ inscricao.evento.nome }}"
                                  style="max-height: 100px;">
                         {% else %}
                             <i class="fas fa-calendar-alt fa-4x text-primary"></i>
@@ -78,18 +78,14 @@
                     </div>
 
                     <div class="col-md-6">
-                        <h5 class="card-title">{{ inscricao.evento.titulo }}</h5>
+                        <h5 class="card-title">{{ inscricao.evento.nome }}</h5>
                         <p class="card-text mb-2">
                             <i class="fas fa-calendar me-2 text-primary"></i>
-                            {{ inscricao.evento.data_inicio|date:"d/m/Y - H:i" }}
+                            {{ inscricao.evento.data_inicial|date:"d/m/Y" }} - {{ inscricao.evento.horario_inicio|time:"H:i" }}
                         </p>
                         <p class="card-text mb-2">
                             <i class="fas fa-map-marker-alt me-2 text-primary"></i>
                             {{ inscricao.evento.local }}
-                        </p>
-                        <p class="card-text mb-0">
-                            <i class="fas fa-clock me-2 text-primary"></i>
-                            Carga horária: {{ inscricao.evento.carga_horaria }}h
                         </p>
                     </div>
 

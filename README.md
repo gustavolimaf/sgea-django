@@ -68,9 +68,10 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 ###  Certificados
 
 -  Geração automática após término do evento
--  Download em PDF com QR Code
+-  Download em PDF com logo e design profissional
 -  Código de verificação único
--  Validação de certificados
+-  Validação de certificados online
+-  Layout responsivo para impressão
 
 ###  API REST
 
@@ -87,9 +88,10 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 
 ###  Notificações
 
--  Email de boas-vindas automático
--  Confirmação de inscrições
+-  Email de boas-vindas com logo do SGEA
+-  Confirmação de inscrições com detalhes do evento
 -  Link de confirmação de cadastro
+-  Templates HTML e texto para compatibilidade
 
 ##  Tecnologias Utilizadas
 
@@ -99,6 +101,15 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 - **SQLite** - Banco de dados
 - **HTML5/CSS3** - Frontend modular e responsivo
 - **ReportLab** - Geração de certificados em PDF
+
+### Identidade Visual
+
+- **Logo personalizada** em navbar, emails e certificados
+- **Favicons** para navegadores desktop e mobile
+- **Paleta de cores:**
+  - Primária: `#2563eb` (azul)
+  - Secundária: `#64748b` (cinza)
+  - Sucesso: `#28a745` (verde)
 
 ### Arquitetura CSS
 

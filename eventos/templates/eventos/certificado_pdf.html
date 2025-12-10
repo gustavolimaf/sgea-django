@@ -17,7 +17,10 @@
 
         <!-- Header -->
         <div class="certificado-header">
-            <div class="certificado-logo">SGEA</div>
+            <div class="certificado-logo">
+                <img src="{% static 'images/favicon_io/android-chrome-512x512.png' %}" alt="SGEA" style="width: 120px; height: 120px; margin-bottom: 10px;" />
+                <div>SGEA</div>
+            </div>
             <div class="certificado-titulo">Certificado de Participação</div>
         </div>
 
@@ -37,10 +40,6 @@
             
             <p class="certificado-evento">
                 {{ certificado.inscricao.evento.nome }}
-            </p>
-            
-            <p class="certificado-carga">
-                Carga horária: {{ certificado.inscricao.evento.carga_horaria }} horas
             </p>
             
             <p class="certificado-texto" style="margin-top: 20px;">

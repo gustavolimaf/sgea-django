@@ -165,27 +165,33 @@ def eventos_list(request):
     Lista de eventos disponíveis
     """
     eventos = Evento.objects.filter(
-        ativo=True,
-        data_inicial__gte=timezone.now().date()
+        ativo=True
     ).annotate(
         total_inscritos=Count('inscricoes', filter=Q(inscricoes__ativa=True))
     ).order_by('data_inicial')
     
-    # Filtros
-    tipo_filter = request.GET.get('tipo')
-    if tipo_filter:
-        eventos = eventos.filter(tipo=tipo_filter)
-    
-    busca = request.GET.get('busca')
-    if busca:
+    # Filtro de pesquisa
+    search = request.GET.get('search')
+    if search:
         eventos = eventos.filter(
-            Q(nome__icontains=busca) | 
-            Q(descricao__icontains=busca)
+            Q(nome__icontains=search) | 
+            Q(descricao__icontains=search)
         )
+    
+    # Filtro de tipo
+    tipo = request.GET.get('tipo')
+    if tipo:
+        eventos = eventos.filter(tipo=tipo)
+    
+    # Filtro de status
+    status = request.GET.get('status')
+    if status == 'aberto':
+        eventos = eventos.filter(data_inicial__gte=timezone.now().date())
+    elif status == 'encerrado':
+        eventos = eventos.filter(data_inicial__lt=timezone.now().date())
     
     context = {
         'eventos': eventos,
-        'tipo_choices': Evento.TIPO_CHOICES,
     }
     return render(request, 'eventos/eventos_list.html', context)
 

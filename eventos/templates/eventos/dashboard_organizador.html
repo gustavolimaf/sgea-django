@@ -137,11 +137,11 @@
                                 {% for evento in meus_eventos %}
                                     <tr>
                                         <td>
-                                            <strong>{{ evento.titulo }}</strong>
+                                            <strong>{{ evento.nome }}</strong>
                                         </td>
                                         <td>
                                             <i class="fas fa-calendar me-1"></i>
-                                            {{ evento.data_inicio|date:"d/m/Y H:i" }}
+                                            {{ evento.data_inicial|date:"d/m/Y" }} {{ evento.horario_inicio|time:"H:i" }}
                                         </td>
                                         <td>
                                             <i class="fas fa-map-marker-alt me-1"></i>
@@ -149,11 +149,11 @@
                                         </td>
                                         <td>
                                             <span class="badge bg-info">
-                                                {{ evento.inscricoes.count }}/{{ evento.vagas }}
+                                                {{ evento.inscricoes.count }}/{{ evento.vagas_totais }}
                                             </span>
                                         </td>
                                         <td>
-                                            {% if evento.is_ativo %}
+                                            {% if evento.ativo %}
                                                 <span class="badge bg-success">Ativo</span>
                                             {% else %}
                                                 <span class="badge bg-secondary">Encerrado</span>
@@ -220,7 +220,7 @@
                                         <h6 class="mb-1">{{ inscricao.participante.get_full_name|default:inscricao.participante.username }}</h6>
                                         <p class="mb-0 text-muted">
                                             <i class="fas fa-calendar me-2"></i>
-                                            {{ inscricao.evento.titulo }} - 
+                                            {{ inscricao.evento.nome }} - 
                                             Inscrito em {{ inscricao.data_inscricao|date:"d/m/Y H:i" }}
                                         </p>
                                     </div>

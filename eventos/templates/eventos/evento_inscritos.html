@@ -2,7 +2,7 @@
 
 
 
-{% block title %}Inscritos - {{ evento.nome }} - SGEA{% endblock %}{% block title %}Inscritos - {{ evento.titulo }} - SGEA{% endblock %}
+{% block title %}Inscritos - {{ evento.nome }} - SGEA{% endblock %}
 
 
 
@@ -18,7 +18,7 @@
 
         padding: 2rem;        </h2>
 
-        border-radius: 0.5rem;        <p class="text-muted">{{ evento.titulo }}</p>
+        border-radius: 0.5rem;        <p class="text-muted">{{ evento.nome }}</p>
 
         margin-bottom: 2rem;    </div>
 
@@ -62,9 +62,9 @@
 
         text-align: center;            <div class="card-body text-center">
 
-    }                <h3>{{ evento.vagas }}</h3>
+    }                <h3>{{ evento.vagas_disponiveis }}</h3>
 
-                <p class="mb-0">Vagas Totais</p>
+                <p class="mb-0">Vagas Dispon\u00edveis</p>
 
     .stat-number-small {            </div>
 
@@ -80,7 +80,7 @@
 
                 <h3>{{ evento.vagas_disponiveis }}</h3>
 
-    .stat-label-small {                <p class="mb-0">Vagas Disponíveis</p>
+    .stat-label-small {                <p class="mb-0">Vagas Totais</p>
 
         font-size: 0.875rem;            </div>
 
@@ -90,11 +90,13 @@
 
     <div class="col-md-3 mb-3">
 
-    .inscritos-table {        <div class="card bg-info text-white">
+    .inscritos-table {        <div class="card bg-warning text-white">
 
         background: white;            <div class="card-body text-center">
 
-        border-radius: 0.5rem;                <h3>{{ evento.percentual_vagas|floatformat:0 }}%</h3>
+        border-radius: 0.5rem;                <h3>{{ evento.vagas_totais }}</h3>
+
+                <h3>{{ taxa_ocupacao }}%</h3>
 
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);                <p class="mb-0">Taxa de Ocupação</p>
 

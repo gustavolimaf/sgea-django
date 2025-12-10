@@ -22,10 +22,10 @@
                 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h6 class="card-title">{{ evento.titulo }}</h6>
+                        <h6 class="card-title">{{ evento.nome }}</h6>
                         <p class="card-text mb-2">
                             <i class="fas fa-calendar me-2"></i>
-                            {{ evento.data_inicio|date:"d/m/Y - H:i" }}
+                            {{ evento.data_inicial|date:"d/m/Y" }} - {{ evento.horario_inicio|time:"H:i" }}
                         </p>
                         <p class="card-text mb-0">
                             <i class="fas fa-map-marker-alt me-2"></i>

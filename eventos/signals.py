@@ -138,6 +138,9 @@ def enviar_email_boas_vindas(usuario):
     Envia email de boas-vindas com link de confirmação
     """
     try:
+        from django.core.mail import EmailMultiAlternatives
+        import os
+        
         assunto = 'Bem-vindo ao SGEA - Confirme seu email'
         
         # Link de confirmação
@@ -153,14 +156,23 @@ def enviar_email_boas_vindas(usuario):
         mensagem_html = render_to_string('eventos/emails/boas_vindas.html', contexto)
         mensagem_texto = render_to_string('eventos/emails/boas_vindas.txt', contexto)
         
-        send_mail(
+        # Criar email com anexo inline
+        email = EmailMultiAlternatives(
             assunto,
             mensagem_texto,
             settings.DEFAULT_FROM_EMAIL,
-            [usuario.email],
-            html_message=mensagem_html,
-            fail_silently=True
+            [usuario.email]
         )
+        email.attach_alternative(mensagem_html, "text/html")
+        
+        # Anexar logo como inline
+        logo_path = os.path.join(settings.STATIC_ROOT or settings.STATICFILES_DIRS[0], 'images/favicon_io/android-chrome-512x512.png')
+        if os.path.exists(logo_path):
+            with open(logo_path, 'rb') as f:
+                email.attach('logo.png', f.read(), 'image/png')
+                email.content_subtype = 'html'
+        
+        email.send(fail_silently=True)
     except Exception as e:
         print(f"Erro ao enviar email de boas-vindas: {e}")
 
@@ -170,6 +182,9 @@ def enviar_email_confirmacao_inscricao(inscricao):
     Envia email de confirmação de inscrição
     """
     try:
+        from django.core.mail import EmailMultiAlternatives
+        import os
+        
         assunto = f'Inscrição confirmada - {inscricao.evento.nome}'
         
         contexto = {
@@ -180,14 +195,23 @@ def enviar_email_confirmacao_inscricao(inscricao):
         mensagem_html = render_to_string('eventos/emails/confirmacao_inscricao.html', contexto)
         mensagem_texto = render_to_string('eventos/emails/confirmacao_inscricao.txt', contexto)
         
-        send_mail(
+        # Criar email com anexo inline
+        email = EmailMultiAlternatives(
             assunto,
             mensagem_texto,
             settings.DEFAULT_FROM_EMAIL,
-            [inscricao.usuario.email],
-            html_message=mensagem_html,
-            fail_silently=True
+            [inscricao.usuario.email]
         )
+        email.attach_alternative(mensagem_html, "text/html")
+        
+        # Anexar logo como inline
+        logo_path = os.path.join(settings.STATIC_ROOT or settings.STATICFILES_DIRS[0], 'images/favicon_io/android-chrome-512x512.png')
+        if os.path.exists(logo_path):
+            with open(logo_path, 'rb') as f:
+                email.attach('logo.png', f.read(), 'image/png')
+                email.content_subtype = 'html'
+        
+        email.send(fail_silently=True)
     except Exception as e:
         print(f"Erro ao enviar email de confirmação: {e}")
 
