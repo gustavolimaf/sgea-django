@@ -1,6 +1,6 @@
 {% extends 'eventos/base.html' %}
 
-{% block title %}Home - SGEA{% endblock %}
+{% block title %}Home - EventLabs{% endblock %}
 
 {% block extra_css %}
 {% load static %}
@@ -11,7 +11,7 @@
 <div class="container">
   <!-- Hero Section -->
   <div class="hero">
-    <h1>Sistema de Gestão de Eventos Acadêmicos</h1>
+    <h1>EventLabs</h1>
     <p>Organize, participe e gerencie eventos acadêmicos com facilidade</p>
     {% if not user.is_authenticated %}
     <a

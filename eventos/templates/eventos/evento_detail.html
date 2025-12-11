@@ -1,6 +1,6 @@
 {% extends 'eventos/base.html' %}
 
-{% block title %}{{ evento.nome }} - SGEA{% endblock %}
+{% block title %}{{ evento.nome }} - EventLabs{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -55,10 +55,11 @@
                     <div class="col-md-6 mb-3">
                         <h6><i class="fas fa-users me-2 text-primary"></i>Vagas</h6>
                         <p>
-                            {% with total_inscritos=evento.inscricoes.filter|default:0 %}
-                            <strong>{{ evento.inscricoes.count }}</strong> de <strong>{{ evento.vagas_totais }}</strong> vagas preenchidas
+                            {% with total_inscritos=evento.inscricoes.count %}
+                                <strong>{{ total_inscritos }}</strong> de <strong>{{ evento.vagas_totais }}</strong> vagas preenchidas
                             {% endwith %}
                         </p>
+                    
                         {% widthratio evento.inscricoes.count evento.vagas_totais 100 as percentual %}
                         <div class="progress" style="height: 25px;">
                             <div class="progress-bar" 
@@ -214,4 +215,5 @@
         </a>
     </div>
 </div>
+
 {% endblock %}

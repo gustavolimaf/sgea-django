@@ -7,6 +7,9 @@ from pathlib import Path
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-change-this-in-production-12345'
 
@@ -20,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'crispy_forms',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',

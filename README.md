@@ -168,7 +168,7 @@ python seed_data.py
 ```
 
 Isso criará 3 usuários de teste:
-- **Organizador:** organizador@sgea.com / Admin@123
+- **Organizador:** admin / admin123
 - **Professor:** professor@sgea.com / Professor@123
 - **Aluno:** aluno@sgea.com / Aluno@123
 
