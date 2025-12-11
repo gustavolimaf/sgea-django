@@ -492,9 +492,13 @@ def evento_inscritos(request, pk):
     })
 
 
-def certificado_validar(request, codigo):
+def certificado_validar(request, codigo=None):
     """Validação de certificado por código"""
     from .models import Auditoria
+    
+    # Tenta pegar o código da URL ou do query parameter
+    if not codigo:
+        codigo = request.GET.get('codigo', '')
     
     # Se não há código, mostra o formulário
     if not codigo:
