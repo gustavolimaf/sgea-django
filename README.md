@@ -106,20 +106,22 @@ O SGEA é uma plataforma web que facilita a organização, divulgação e gestã
 
 - **Logo personalizada** em navbar, emails e certificados
 - **Favicons** para navegadores desktop e mobile
-- **Paleta de cores:**
-  - Primária: `#2563eb` (azul)
-  - Secundária: `#64748b` (cinza)
-  - Sucesso: `#28a745` (verde)
+- **Paleta de cores (3 cores principais):**
+  - Primária (Roxo): `#8b5cf6` - Interface principal, botões, eventos
+  - Sucesso (Verde): `#10b981` - Status positivo, confirmações
+  - Alerta (Laranja): `#f59e0b` - Avisos, validações, alertas
+  - Neutras: Cinza escuro (`#1e293b`), Cinza médio (`#64748b`), Claro (`#f8fafc`)
 
 ### Arquitetura CSS
 
 CSS modular com identidade visual padronizada:
 
-- **base.css** - Estilos globais e variáveis CSS (cores, fontes)
-- **home.css** - Página inicial
-- **dashboard.css** - Dashboards de usuários
+- **base.css** - Estilos globais, variáveis CSS e classes utilitárias (gradientes)
+- **home.css** - Página inicial com hero section
+- **dashboard.css** - Dashboards de usuários com cards de estatísticas
+- **evento-detail.css** - Detalhes e inscrição em eventos
 - **evento-inscritos.css** - Gerenciamento de inscritos
-- **certificado.css** - Layout para PDFs
+- **certificado.css** - Layout para PDFs de certificados
 
 ##  Instalação
 

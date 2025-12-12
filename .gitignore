@@ -208,3 +208,6 @@ __marimo__/
 
 # Django static files (generated)
 staticfiles/
+
+# Django media files (user uploads)
+media/
