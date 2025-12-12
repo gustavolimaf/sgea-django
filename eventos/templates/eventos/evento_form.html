@@ -4,9 +4,10 @@
 {% block title %}{% if form.instance.pk %}Editar{% else %}Novo{% endif %} Evento - EventLabs{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+        <div class="card border-0 shadow-sm">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">
                     <i class="fas fa-{% if form.instance.pk %}edit{% else %}plus-circle{% endif %} me-2"></i>
@@ -122,6 +123,17 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="id_professor_responsavel" class="form-label">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Professor Responsável *
+                        </label>
+                        {{ form.professor_responsavel }}
+                        {% if form.professor_responsavel.errors %}
+                            <div class="text-danger small">{{ form.professor_responsavel.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Todo evento deve ter um professor responsável vinculado.</div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="id_banner" class="form-label">
                             <i class="fas fa-image me-2"></i>Banner do Evento
                         </label>
@@ -135,6 +147,7 @@
                                 <p class="small text-muted mt-1">Imagem atual</p>
                             </div>
                         {% endif %}
+                        <div class="form-text">Formatos aceitos: JPG, PNG, GIF, WEBP (máx. 5MB)</div>
                     </div>
 
                     <div class="mb-3 form-check">
@@ -166,6 +179,7 @@
         <div class="alert alert-info mt-3">
             <i class="fas fa-info-circle me-2"></i>
             <strong>Dica:</strong> Preencha todos os campos obrigatórios marcados com *
+        </div>
         </div>
     </div>
 </div>

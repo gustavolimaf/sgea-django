@@ -3,66 +3,10 @@
 
 {% block title %}Inscritos - {{ evento.nome }} - EventLabs{% endblock %}
 
-{# ----------------------------------------------------- #}
-{#              BLOCO PARA CSS CUSTOMIZADO               #}
-{# ----------------------------------------------------- #}
 {% block extra_css %}
-<style>
-    .evento-info-header {
-        /* Estilo da caixa de informações do evento no topo */
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        margin-bottom: 2rem;
-    }
-    .evento-info-header h1 {
-        font-size: 1.75rem;
-        margin-bottom: 0.5rem;
-    }
-    .stats-grid {
-        /* Grid para as estatísticas */
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-    .inscritos-table {
-        background: white;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    /* Estilos para badges de certificado */
-    .badge-certificado {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: white;
-    }
-    .badge-success {
-        background-color: var(--success-color, #198754); /* Cor padrão do Bootstrap */
-    }
-    .badge-secondary {
-        background-color: var(--secondary-color, #6c757d); /* Cor padrão do Bootstrap */
-    }
-
-    /* Ajustes na tabela */
-    #tabelaInscritos th, #tabelaInscritos td {
-        vertical-align: middle;
-    }
-    #tabelaInscritos tbody tr:hover {
-        background-color: #f8fafc;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/evento-inscritos.css' %}">
 {% endblock %}
 
-{# ----------------------------------------------------- #}
-{#                  BLOCO DE CONTEÚDO HTML               #}
-{# ----------------------------------------------------- #}
 {% block content %}
 <div class="container">
     {# Cabeçalho da página #}
@@ -89,35 +33,35 @@
 
     {# Estatísticas #}
     <div class="stats-grid">
-        <div class="card bg-primary text-white text-center">
-            <div class="card-body">
-                <h3>{{ total_inscritos|default:evento.inscricoes.count }}</h3>
-                <p class="mb-0">Total de Inscritos</p>
+        <div class="card shadow-sm bg-gradient-primary border-0">
+            <div class="card-body text-center">
+                <h3 class="display-5 fw-bold">{{ total_inscritos|default:evento.inscricoes.count }}</h3>
+                <p class="mb-0 fw-semibold">Total de Inscritos</p>
             </div>
         </div>
-        <div class="card bg-success text-white text-center">
-            <div class="card-body">
-                <h3>{{ evento.vagas_totais }}</h3>
-                <p class="mb-0">Vagas Totais</p>
+        <div class="card shadow-sm bg-gradient-success border-0">
+            <div class="card-body text-center">
+                <h3 class="display-5 fw-bold">{{ evento.vagas_totais }}</h3>
+                <p class="mb-0 fw-semibold">Vagas Totais</p>
             </div>
         </div>
-        <div class="card bg-info text-white text-center">
-            <div class="card-body">
-                <h3>{{ evento.vagas_disponiveis }}</h3>
-                <p class="mb-0">Vagas Disponíveis</p>
+        <div class="card shadow-sm bg-gradient-primary border-0">
+            <div class="card-body text-center">
+                <h3 class="display-5 fw-bold">{{ evento.vagas_disponiveis }}</h3>
+                <p class="mb-0 fw-semibold">Vagas Disponíveis</p>
             </div>
         </div>
-        <div class="card bg-warning text-dark text-center">
-            <div class="card-body">
+        <div class="card shadow-sm bg-gradient-warning border-0">
+            <div class="card-body text-center">
                 {# Assumindo que taxa_ocupacao é calculada na view ou está disponível #}
-                <h3>{% if evento.vagas_totais > 0 %}{{ total_inscritos|divisibleby:evento.vagas_totais|mul:100|floatformat:0 }}%{% else %}N/A{% endif %}</h3>
-                <p class="mb-0">Taxa de Ocupação</p>
+                <h3 class="display-5 fw-bold">{% if evento.vagas_totais > 0 %}{{ total_inscritos|divisibleby:evento.vagas_totais|mul:100|floatformat:0 }}%{% else %}N/A{% endif %}</h3>
+                <p class="mb-0 fw-semibold">Taxa de Ocupação</p>
             </div>
         </div>
-        <div class="card bg-secondary text-white text-center">
-            <div class="card-body">
-                <h3>{{ certificados_emitidos|default:0 }}</h3>
-                <p class="mb-0">Certificados Emitidos</p>
+        <div class="card shadow-sm bg-gradient-success border-0">
+            <div class="card-body text-center">
+                <h3 class="display-5 fw-bold">{{ certificados_emitidos|default:0 }}</h3>
+                <p class="mb-0 fw-semibold">Certificados Emitidos</p>
             </div>
         </div>
     </div>

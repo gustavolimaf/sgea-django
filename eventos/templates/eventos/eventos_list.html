@@ -3,23 +3,26 @@
 {% block title %}Eventos - EventLabs{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h2>
-            <i class="fas fa-calendar-alt me-2"></i>Eventos Disponíveis
-        </h2>
-    </div>
-    <div class="col-md-4 text-end">
-        {% if user.is_staff %}
-            <a href="{% url 'evento_create' %}" class="btn btn-primary">
-                <i class="fas fa-plus-circle me-2"></i>Novo Evento
-            </a>
-        {% endif %}
-    </div>
-</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2>
+                        <i class="fas fa-calendar-alt me-2"></i>Eventos Disponíveis
+                    </h2>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if user.is_staff %}
+                        <a href="{% url 'evento_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i>Novo Evento
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
 
-<!-- Filtros -->
-<div class="card mb-4">
+            <!-- Filtros -->
+            <div class="card mb-4 border-0 shadow-sm">
     <div class="card-body">
         <form method="get" class="row g-3">
             <div class="col-md-4">
@@ -158,4 +161,7 @@
         {% endif %}
     </div>
 {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

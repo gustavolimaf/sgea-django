@@ -3,7 +3,7 @@
    ==================== */
 
 .evento-info-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 2rem;
   border-radius: 0.5rem;
@@ -53,6 +53,27 @@
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+/* Badge de Certificado */
+.badge-certificado {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+}
+
+/* Ajustes na tabela */
+#tabelaInscritos th, 
+#tabelaInscritos td {
+  vertical-align: middle;
+}
+
+#tabelaInscritos tbody tr:hover {
+  background-color: #f8fafc;
+  transition: background-color 0.2s;
 }
 
 .table-header {

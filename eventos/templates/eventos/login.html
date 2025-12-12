@@ -3,8 +3,10 @@
 {% block title %}Login - EventLabs{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 500px;">
-    <div class="card">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6">
+    <div class="card border-0 shadow-sm">
         <h1 class="card-title text-center">Entrar no EventLabs</h1>
         <p class="text-center mb-4" style="color: var(--secondary-color);">
             Acesse sua conta para gerenciar eventos e inscrições
@@ -58,6 +60,8 @@
         <p class="text-center mt-3">
             Não tem uma conta? <a href="{% url 'registro' %}" style="color: var(--primary-color); font-weight: 500;">Cadastre-se</a>
         </p>
+    </div>
+        </div>
     </div>
 </div>
 {% endblock %}

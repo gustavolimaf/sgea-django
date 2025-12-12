@@ -144,8 +144,6 @@ class Evento(models.Model):
         on_delete=models.PROTECT,
         related_name='eventos_como_responsavel',
         limit_choices_to={'perfil': 'PROFESSOR'},
-        null=True,
-        blank=True,
         help_text="Professor responsável pelo evento acadêmico"
     )
     
@@ -208,10 +206,14 @@ class Evento(models.Model):
                     })
         
         # Validar professor responsável
-        if self.professor_responsavel and self.professor_responsavel.perfil != 'PROFESSOR':
-            raise ValidationError({
-                'professor_responsavel': 'O responsável deve ser um professor.'
-            })
+        if self.professor_responsavel_id:
+            try:
+                if self.professor_responsavel.perfil != 'PROFESSOR':
+                    raise ValidationError({
+                        'professor_responsavel': 'O responsável deve ser um professor.'
+                    })
+            except Usuario.DoesNotExist:
+                pass
     
     @property
     def vagas_disponiveis(self):

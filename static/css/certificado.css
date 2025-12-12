@@ -12,7 +12,7 @@
   height: 195mm;
   margin: 5mm auto;
   padding: 20mm;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   border: 10px solid #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   position: relative;

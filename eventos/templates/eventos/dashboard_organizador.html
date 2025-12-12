@@ -3,6 +3,9 @@
 {% block title %}Dashboard Organizador - EventLabs{% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
 <div class="row">
     <div class="col-12">
         <h2 class="mb-4">
@@ -14,12 +17,12 @@
 <!-- Estatísticas Gerais -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="card bg-primary text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="text-uppercase mb-1">Total de Eventos</h6>
-                        <h2 class="mb-0">{{ total_eventos }}</h2>
+                        <h6 class="text-uppercase mb-1 fw-semibold">Total de Eventos</h6>
+                        <h2 class="mb-0 fw-bold">{{ total_eventos }}</h2>
                     </div>
                     <i class="fas fa-calendar fa-3x opacity-50"></i>
                 </div>
@@ -28,12 +31,12 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white">
+        <div class="card shadow-sm bg-gradient-success border-0">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="text-uppercase mb-1">Eventos Ativos</h6>
-                        <h2 class="mb-0">{{ eventos_ativos }}</h2>
+                        <h6 class="text-uppercase mb-1 fw-semibold">Eventos Ativos</h6>
+                        <h2 class="mb-0 fw-bold">{{ eventos_ativos }}</h2>
                     </div>
                     <i class="fas fa-calendar-check fa-3x opacity-50"></i>
                 </div>
@@ -42,12 +45,12 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card bg-info text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="text-uppercase mb-1">Total Inscrições</h6>
-                        <h2 class="mb-0">{{ total_inscricoes }}</h2>
+                        <h6 class="text-uppercase mb-1 fw-semibold">Total Inscrições</h6>
+                        <h2 class="mb-0 fw-bold">{{ total_inscricoes }}</h2>
                     </div>
                     <i class="fas fa-users fa-3x opacity-50"></i>
                 </div>
@@ -56,12 +59,12 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white">
+        <div class="card shadow-sm bg-gradient-warning border-0">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="text-uppercase mb-1">Certificados</h6>
-                        <h2 class="mb-0">{{ total_certificados }}</h2>
+                        <h6 class="text-uppercase mb-1 fw-semibold">Certificados</h6>
+                        <h2 class="mb-0 fw-bold">{{ total_certificados }}</h2>
                     </div>
                     <i class="fas fa-certificate fa-3x opacity-50"></i>
                 </div>
@@ -236,6 +239,8 @@
                     </div>
                 {% endif %}
             </div>
+        </div>
+    </div>
         </div>
     </div>
 </div>

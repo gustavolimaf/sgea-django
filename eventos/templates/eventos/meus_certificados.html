@@ -3,6 +3,9 @@
 {% block title %}Meus Certificados - EventLabs{% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
 <div class="row mb-4">
     <div class="col-12">
         <h2>
@@ -15,26 +18,26 @@
 <!-- Estatísticas -->
 <div class="row mb-4">
     <div class="col-md-4 mb-3">
-        <div class="card bg-success text-white">
+        <div class="card shadow-sm bg-gradient-success border-0">
             <div class="card-body text-center">
-                <h3>{{ total_certificados }}</h3>
-                <p class="mb-0">Certificados Emitidos</p>
+                <h3 class="display-4 fw-bold">{{ total_certificados }}</h3>
+                <p class="mb-0 fw-semibold">Certificados Emitidos</p>
             </div>
         </div>
     </div>
     <div class="col-md-4 mb-3">
-        <div class="card bg-primary text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body text-center">
-                <h3>{{ total_horas }}</h3>
-                <p class="mb-0">Horas de Eventos</p>
+                <h3 class="display-4 fw-bold">{{ total_horas }}</h3>
+                <p class="mb-0 fw-semibold">Horas de Eventos</p>
             </div>
         </div>
     </div>
     <div class="col-md-4 mb-3">
-        <div class="card bg-info text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body text-center">
-                <h3>{{ eventos_concluidos }}</h3>
-                <p class="mb-0">Eventos Concluídos</p>
+                <h3 class="display-4 fw-bold">{{ eventos_concluidos }}</h3>
+                <p class="mb-0 fw-semibold">Eventos Concluídos</p>
             </div>
         </div>
     </div>
@@ -185,4 +188,7 @@ function copiarCodigo(codigo) {
     });
 }
 </script>
+        </div>
+    </div>
+</div>
 {% endblock %}

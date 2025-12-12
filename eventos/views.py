@@ -9,7 +9,9 @@ from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from .models import Usuario, Evento, Inscricao, Certificado
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
+from .models import Usuario, Evento, Inscricao, Certificado, Auditoria
 from .forms import UsuarioRegistroForm, EventoForm, LoginForm
 
 
@@ -260,10 +262,14 @@ def evento_create(request):
                     for error in errors:
                         messages.error(request, f'{field}: {error}')
         else:
-            messages.error(
-                request, 
-                'Por favor, corrija os erros no formulário.'
-            )
+            # Mostrar erros detalhados do formulário
+            for field, errors in form.errors.items():
+                for error in errors:
+                    if field == '__all__':
+                        messages.error(request, error)
+                    else:
+                        field_label = form.fields[field].label if field in form.fields else field
+                        messages.error(request, f'{field_label}: {error}')
     else:
         form = EventoForm()
     
@@ -494,7 +500,6 @@ def evento_inscritos(request, pk):
 
 def certificado_validar(request, codigo=None):
     """Validação de certificado por código"""
-    from .models import Auditoria
     
     # Tenta pegar o código da URL ou do query parameter
     if not codigo:
@@ -564,9 +569,6 @@ def auditoria_list(request):
         messages.error(request, 'Acesso negado. Apenas organizadores podem acessar esta área.')
         return redirect('dashboard')
     
-    from .models import Auditoria
-    from django.core.paginator import Paginator
-    
     # Filtros
     auditorias = Auditoria.objects.all()
     
@@ -628,7 +630,6 @@ def certificado_download(request, pk):
     
     # TODO: Implementar geração de PDF
     # Por enquanto, retorna uma resposta simples
-    from django.template.loader import render_to_string
     
     html_content = render_to_string('eventos/certificado_pdf.html', {
         'certificado': certificado,

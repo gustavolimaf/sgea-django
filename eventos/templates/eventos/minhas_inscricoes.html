@@ -3,6 +3,9 @@
 {% block title %}Minhas Inscrições - EventLabs{% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
 <div class="row mb-4">
     <div class="col-12">
         <h2>
@@ -15,26 +18,26 @@
 <!-- Estatísticas -->
 <div class="row mb-4">
     <div class="col-md-4 mb-3">
-        <div class="card bg-primary text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body text-center">
-                <h3>{{ inscricoes_ativas }}</h3>
-                <p class="mb-0">Inscrições Ativas</p>
+                <h3 class="display-4 fw-bold">{{ inscricoes_ativas }}</h3>
+                <p class="mb-0 fw-semibold">Inscrições Ativas</p>
             </div>
         </div>
     </div>
     <div class="col-md-4 mb-3">
-        <div class="card bg-success text-white">
+        <div class="card shadow-sm bg-gradient-success border-0">
             <div class="card-body text-center">
-                <h3>{{ eventos_realizados }}</h3>
-                <p class="mb-0">Eventos Realizados</p>
+                <h3 class="display-4 fw-bold">{{ eventos_realizados }}</h3>
+                <p class="mb-0 fw-semibold">Eventos Realizados</p>
             </div>
         </div>
     </div>
     <div class="col-md-4 mb-3">
-        <div class="card bg-info text-white">
+        <div class="card shadow-sm bg-gradient-primary border-0">
             <div class="card-body text-center">
-                <h3>{{ total_inscricoes }}</h3>
-                <p class="mb-0">Total de Inscrições</p>
+                <h3 class="display-4 fw-bold">{{ total_inscricoes }}</h3>
+                <p class="mb-0 fw-semibold">Total de Inscrições</p>
             </div>
         </div>
     </div>
@@ -181,4 +184,7 @@
         <a href="{% url 'eventos_list' %}" class="alert-link">Ver eventos disponíveis</a>
     </div>
 {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
